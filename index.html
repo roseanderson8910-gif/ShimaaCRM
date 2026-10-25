@@ -1,5 +1,21 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
+<html lang="en"><head>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBCQn1eUX6dQ6zh76TG12sWPOpbNrZaapE",
+        authDomain: "shimaa-fa02c.firebaseapp.com",
+        projectId: "shimaa-fa02c",
+        storageBucket: "shimaa-fa02c.firebasestorage.app",
+        messagingSenderId: "134858847211",
+        appId: "1:134858847211:web:cb8d0a9a0f01819a3a9fae",
+        measurementId: "G-7VSRT42Y7D"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+  <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shimaa CRM</title>
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
