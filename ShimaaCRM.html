@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shimaa CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--fb),system-ui,sans-serif;--soft:color-mix(in srgb,var(--ink) 62%,var(--card));--line:color-mix(in srgb,var(--ink) 15%,var(--card));--tsoft:color-mix(in srgb,var(--teal) 16%,var(--card))}
+h1,h2,.serif{font-family:var(--fh),Georgia,serif}
+button{font-family:inherit;cursor:pointer}
+.app{display:flex;min-height:100vh}
+.side{width:210px;flex-shrink:0;background:var(--side);color:var(--sidetext);padding:22px 0;display:flex;flex-direction:column}
+.brand{font-family:var(--fh),serif;font-size:22px;font-weight:700;padding:0 22px 18px;border-bottom:1px solid #ffffff22;margin-bottom:10px}.brand span{color:var(--gold)}
+.nav{padding:11px 22px;font-size:15px;opacity:.75;border-left:3px solid transparent;cursor:pointer}
+.nav:hover{opacity:1;background:#ffffff10}.nav.on{opacity:1;background:#ffffff18;border-left-color:var(--gold)}
+.main{flex:1;min-width:0;padding:20px 32px 80px}
+.page{display:none}.page.on{display:block}
+.head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.head h1{margin:0;font-size:27px}.head p{margin:3px 0 0;color:var(--soft);font-size:14px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:4px;font-size:14px;font-weight:600}
+.btn.b{background:var(--brick);border-color:var(--brick);color:#fff}.btn.g{background:transparent;color:var(--ink);border-color:var(--line)}.btn.d{background:transparent;color:var(--brick);border-color:var(--line)}.btn.s{padding:5px 10px;font-size:12.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:7px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.grid3,.grid2{grid-template-columns:1fr}.side{width:130px}.main{padding:16px}}
+.stat{padding:16px 18px}.stat b{font-family:var(--fh),serif;font-size:30px;display:block}.stat span{color:var(--soft);font-size:13px}
+.row{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.row .t{font-weight:700}.sub{font-size:12.5px;color:var(--soft);margin-top:2px}
+.empty{padding:22px;text-align:center;color:var(--soft)}
+.badge{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;color:var(--ink)}
+.badge.hot{background:var(--hot)}.badge.warm{background:var(--warm)}.badge.cold{background:var(--cold)}
+input,select,textarea{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--ink);width:100%}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--soft);margin-bottom:4px}
+.f{margin-bottom:12px}.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mbg{display:none;position:fixed;inset:0;background:#0007;justify-content:center;align-items:flex-start;padding:30px 14px;overflow-y:auto;z-index:50}.mbg.on{display:flex}
+.modal{background:var(--card);border-radius:8px;width:100%;max-width:520px;padding:22px 24px}.modal h2{margin:0 0 14px}
+.acts{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.board{display:flex;gap:14px;overflow-x:auto;align-items:flex-start;padding-bottom:8px}
+.col{background:var(--card);border:1px solid var(--line);border-radius:8px;width:290px;flex-shrink:0}
+.ch{padding:11px 14px;display:flex;justify-content:space-between;font-weight:700;border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;color:var(--ink)}
+.cb{padding:9px;display:flex;flex-direction:column;gap:9px;min-height:70px}.cb.over{background:var(--tsoft)}
+.lc{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 12px;cursor:grab}.lc.drag{opacity:.4}
+.lc .n{font-weight:700}.lc textarea{margin-top:7px;font-size:12.5px;min-height:34px;resize:vertical}
+.call{display:flex;gap:8px;align-items:center;margin-top:7px;font-size:12px;color:var(--soft)}
+.call button{background:var(--call);color:var(--calltext);border:0;border-radius:5px;padding:4px 9px;font-weight:700;font-size:12px}
+.ni{margin-top:16px;padding:16px;border:2px dashed var(--line);border-radius:8px;text-align:center;cursor:pointer;font-weight:700;color:var(--ink)}
+.ni.over{outline:3px solid var(--brick)}
+.chip{display:inline-block;background:var(--tsoft);color:var(--teal);padding:3px 10px;border-radius:20px;font-size:12.5px;margin:3px 3px 0 0;cursor:pointer}
+.tpl{padding:14px 16px;width:310px;flex-shrink:0}.tpl .th{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.tpl .th input{font-weight:700;font-size:15px;flex:1 1 100%}
+.ti{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}.ti textarea{min-height:56px}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.cg div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px}
+.cg input{width:44px;height:30px;padding:0;border:0;background:none}
+.toast{position:fixed;bottom:18px;left:18px;background:var(--ink);color:var(--paper);padding:11px 16px;border-radius:6px;opacity:0;transition:.25s;pointer-events:none;z-index:99}.toast.on{opacity:1}
+#aiB{position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;background:var(--brick);color:#fff;border:0;font-size:22px;z-index:40}#aiP{display:none;position:fixed;bottom:80px;right:18px;width:340px;max-width:calc(100vw - 36px);height:440px;max-height:70vh;background:var(--card);border:1px solid var(--line);border-radius:10px;z-index:40;flex-direction:column;overflow:hidden}#aiP.on{display:flex}#aiL{flex:1;overflow:auto;padding:10px}.am{padding:8px 11px;border-radius:9px;margin-bottom:8px;font-size:14px;white-space:pre-wrap}.am.u{background:var(--ink);color:var(--paper);margin-left:auto;max-width:85%}.am.a{background:var(--tsoft);max-width:92%}#aiP .ir{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.dc{background:var(--deal);border:1px solid var(--line);border-radius:8px;padding:12px;cursor:pointer;color:var(--ink)}.dc img{width:100%;height:120px;object-fit:cover;border-radius:5px;margin-bottom:8px}.th2{display:flex;flex-wrap:wrap;gap:8px}.th2 .ph{position:relative}.th2 img{width:96px;height:80px;object-fit:cover;border-radius:5px}.th2 .ph button{position:absolute;top:2px;right:2px;padding:0 6px}.lg{border-left:2px solid var(--line);padding:2px 0 8px 10px;font-size:13px}.lg small{color:var(--soft);display:block}
+</style></head><body>
+<div class="app">
+<div class="side"><div class="brand">Shimaa <span>CRM</span></div>
+<div class="nav on" data-p="dashboard">dashboard</div><div class="nav" data-p="buyers">buyers</div><div class="nav" data-p="leads">leads</div><div class="nav" data-p="deals">closed deals</div><div class="nav" data-p="offers">offers</div><div class="nav" data-p="tasks">tasks</div><div class="nav" data-p="city">by city</div><div class="nav" data-p="templates">templates</div><div class="nav" data-p="settings">settings</div></div>
+<div class="main">
+<div class="page on" id="p-dashboard"><div class="head"><div><h1>dashboard</h1><p id="today"></p></div><button class="btn b" onclick="taskModal()">+ new task</button></div>
+<div class="grid3"><div class="card stat"><b id="sB">0</b><span>buyers tracked</span></div><div class="card stat"><b id="sH">0</b><span>hot leads</span></div><div class="card stat"><b id="sT">0</b><span>tasks due today</span></div></div>
+<div class="grid2"><div class="card" style="padding:16px"><b>today and overdue tasks</b><div id="dT"></div></div><div class="card" style="padding:16px"><b>hot leads</b><div id="dH"></div></div></div></div>
+<div class="page" id="p-buyers"><div class="head"><div><h1>buyers</h1><p>every buyer, their rating and offers</p></div><button class="btn b" onclick="buyerModal()">+ add buyer</button></div><div class="f"><input id="bq" placeholder="search name, city, state, address..." oninput="rBuyers()"></div><div class="card" id="bList"></div></div>
+<div class="page" id="p-leads"><div class="head"><div><h1>leads</h1><p>drag a card between stages. drop on Not Interested to move it down</p></div><button class="btn b" onclick="buyerModal()">+ add buyer</button></div><div class="board" id="board"></div>
+<div class="ni" id="niZone" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropTo(event,'not_interested');this.classList.remove('over')" onclick="go('notint')"></div></div>
+<div class="page" id="p-notint"><div class="head"><div><h1>not interested</h1><p>auto grouped by city. you can change a group by hand</p></div><button class="btn g" onclick="go('leads')">back to leads</button></div><div class="f"><input id="niQ" placeholder="search city, name or phone..." oninput="rNI()"></div><div id="niList"></div></div>
+<div class="page" id="p-deals"><div class="head"><div><h1>closed deals</h1><p>sold houses with photos, buyer, notes and call recordings</p></div><button class="btn b" onclick="dealModal()">+ add closed deal</button></div><div class="dg" id="dGrid"></div></div>
+<div class="page" id="p-offers"><div class="head"><div><h1>offers</h1><p>every offer, newest first</p></div></div><div class="card" id="oList"></div></div>
+<div class="page" id="p-tasks"><div class="head"><div><h1>tasks</h1><p>reminders for yourself</p></div><button class="btn b" onclick="taskModal()">+ new task</button></div><div class="card" id="tList"></div></div>
+<div class="page" id="p-city"><div class="head"><div><h1>by city</h1><p>type any city to filter</p></div></div><div class="f"><input id="cq" placeholder="e.g. dallas" oninput="rCity()"></div><div id="cChips"></div><div class="card" id="cList" style="margin-top:10px"></div></div>
+<div class="page" id="p-templates"><div class="head"><div><h1>templates</h1><p>write texts once, copy and paste any time</p></div><button class="btn b" onclick="addSec()">+ add section</button></div><div id="tpls" style="display:flex;gap:14px;overflow-x:auto;align-items:flex-start;padding-bottom:10px"></div></div>
+<div class="page" id="p-settings"><div class="head"><div><h1>settings</h1><p>change any color in the site</p></div><div style="display:flex;gap:8px"><button class="btn g s" onclick="preset(LIGHT)">light preset</button><button class="btn g s" onclick="preset(DARK)">dark preset</button></div></div><div id="colors"></div>
+<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>font</b><div class="fr" style="margin-top:10px"><div class="f"><label>headings font</label><select id="fH" onchange="setF()"></select></div><div class="f"><label>body font</label><select id="fB" onchange="setF()"></select></div></div><div class="f"><label>text size: <span id="fZv"></span>%</label><input type="range" id="fZ" min="80" max="130" step="5" oninput="setF()"></div></div>
+<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>AI (Gemini / OpenAI)</b><p class="sub">connect a key, then use the round chat button at the bottom right. the key stays in this browser</p><div class="fr"><div class="f"><label>provider</label><select id="aiProv" onchange="aiProvChange()"><option value="gemini">Gemini</option><option value="openai">OpenAI</option></select></div><div class="f"><label>model</label><input id="aiModel"></div></div><div class="f"><label>api key</label><input type="password" id="aiKey" placeholder="paste your api key"></div><button class="btn b s" onclick="aiSave()">save</button> <button class="btn g s" onclick="aiTest()">test connection</button></div>
+<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>data</b><p class="sub">everything is saved in this browser</p><button class="btn d s" onclick="sure('erase all data?',()=>{S=blank();save();renderAll()})">erase all data</button></div></div>
+</div></div>
+
+<div class="mbg" id="bm"><div class="modal"><h2 id="bmT">add buyer</h2><input type="hidden" id="bId">
+<div class="fr"><div class="f"><label>name</label><input id="bName"></div><div class="f"><label>phone</label><input id="bPhone"></div></div>
+<div class="f"><label>address (city and state fill automatically)</label><input id="bAddr" placeholder="123 Main St, Dallas, TX 75201" onchange="autoAddr()"></div>
+<div class="fr"><div class="f"><label>city</label><input id="bCity" placeholder="e.g. Dallas"></div><div class="f"><label>state</label><input id="bState" maxlength="2"></div></div>
+<div class="fr"><div class="f"><label>status</label><select id="bStatus"><option value="hot">hot</option><option value="warm">warm</option><option value="cold">cold</option></select></div><div class="f"><label>rating (1-10)</label><input id="bRate" type="number" min="1" max="10" value="7"></div></div>
+<div class="fr"><div class="f"><label><input type="checkbox" id="bLead" checked style="width:auto"> on leads board</label></div><div class="f"><select id="bStage"></select></div></div>
+<div class="f"><label>notes</label><textarea id="bNotes" rows="2"></textarea></div>
+<div class="f"><label>offers</label><div id="bOffers"></div><div class="fr" style="margin-top:6px"><input id="oLoc" placeholder="property / area"><input id="oAmt" placeholder="amount"></div><button class="btn g s" style="margin-top:6px" onclick="addOffer()">+ add offer</button></div>
+<div class="acts"><button class="btn g" onclick="cl('bm')">cancel</button><button class="btn d" id="bDel" onclick="delBuyer()">delete</button><button class="btn b" onclick="saveBuyer()">save</button></div></div></div>
+<div class="mbg" id="tm"><div class="modal"><h2 id="tmT">new task</h2><input type="hidden" id="tId">
+<div class="f"><label>task</label><input id="tTitle"></div><div class="fr"><div class="f"><label>date</label><input type="date" id="tDate"></div><div class="f"><label>time</label><input type="time" id="tTime"></div></div>
+<div class="f"><label>related buyer</label><select id="tBuyer"></select></div><div class="f"><label>notes</label><textarea id="tNotes" rows="2"></textarea></div>
+<div class="acts"><button class="btn g" onclick="cl('tm')">cancel</button><button class="btn d" id="tDel" onclick="delTask()">delete</button><button class="btn b" onclick="saveTask()">save</button></div></div></div>
+<div class="mbg" id="pm"><div class="modal" id="pmBody"></div></div>
+<div class="mbg" id="gdlg" style="z-index:70"><div class="modal" style="max-width:380px"><h2 style="font-size:18px">change group</h2><div class="f"><label>pick an existing group</label><select id="gSel"></select></div><div class="f"><label>or create a new group (city)</label><input id="gNew" placeholder="e.g. Houston"></div><div class="acts"><button class="btn g" onclick="cl('gdlg')">cancel</button><button class="btn b" onclick="gOk()">move</button></div></div></div>
+<div class="mbg" id="dm"><div class="modal" style="max-width:600px;background:var(--deal)"><h2>closed deal</h2><div class="f"><label>property address</label><input id="dAddr"></div><div class="f"><label>info about the house</label><textarea id="dInfo" rows="3"></textarea></div><div class="f"><label>photos</label><input type="file" accept="image/*" multiple onchange="upFiles(this,'photos')"><div class="th2" id="dPh" style="margin-top:8px"></div></div><div class="f"><label>buyer who bought</label><input id="dBuyer" list="dBL"><datalist id="dBL"></datalist></div><div class="f"><label>notes</label><textarea id="dNotes" rows="3"></textarea></div><div class="f"><label>calls (audio files)</label><input type="file" accept="audio/*" multiple onchange="upFiles(this,'calls')"><div id="dCl"></div></div><div class="acts"><button class="btn g" onclick="cl('dm')">cancel</button><button class="btn d" id="dDel" onclick="delDeal()">delete</button><button class="btn b" onclick="saveDeal()">save</button></div></div></div>
+<div class="mbg" id="dlg" style="z-index:70"><div class="modal" style="max-width:380px"><h2 id="dlgT" style="font-size:18px"></h2><input id="dlgIn" onkeydown="if(event.key==='Enter')dlgOk()"><div class="acts"><button class="btn g" onclick="cl('dlg')">cancel</button><button class="btn b" onclick="dlgOk()">ok</button></div></div></div>
+<button id="aiB" onclick="$('aiP').classList.toggle('on')">✦</button><div id="aiP"><div id="aiL"></div><div class="ir"><textarea id="aiQ" rows="1" placeholder="ask about your CRM..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askAI()}"></textarea><button class="btn b s" onclick="askAI()">send</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const STAGES=[['new','New Lead'],['voicemail','Voicemail'],['follow_up','Follow Up']];
+const LIGHT={paper:'#f3eee2',card:'#fbf8f1',ink:'#211d18',side:'#211d18',sidetext:'#efe8d8',brick:'#a8402a',teal:'#2f4b3c',gold:'#b8893c',st_new:'#f7edc4',st_voicemail:'#d9e6f2',st_follow_up:'#dcefdc',st_not_interested:'#f4dcd6',hot:'#f4e2dc',warm:'#f2e6c9',cold:'#e2e9e2',call:'#dfe8e0',calltext:'#2f4b3c',deal:'#dcefdc'};
+const DARK={paper:'#14130f',card:'#1e1c16',ink:'#f1ead9',side:'#0f0e0a',sidetext:'#efe8d8',brick:'#d16a4e',teal:'#7ab894',gold:'#e0ac5f',st_new:'#3a3320',st_voicemail:'#1f2c38',st_follow_up:'#1f3324',st_not_interested:'#3a241d',hot:'#3d241b',warm:'#372c17',cold:'#1c2925',call:'#20302a',calltext:'#7ab894',deal:'#1f3324'};
+const LABELS={paper:'main screen background',card:'cards and boxes',ink:'text',side:'sidebar background',sidetext:'sidebar text',brick:'main buttons (accent)',teal:'secondary accent',gold:'highlight',st_new:'New Lead column',st_voicemail:'Voicemail column',st_follow_up:'Follow Up column',st_not_interested:'Not Interested box',hot:'hot badge',warm:'warm badge',cold:'cold badge',call:'call log button',calltext:'call log button text',deal:'closed deals boxes'};
+const blank=()=>({buyers:[],tasks:[],deals:[],tpl:[{id:uid(),name:'Intro',items:[]},{id:uid(),name:'Follow up',items:[]},{id:uid(),name:'No answer',items:[]},{id:uid(),name:'Extras',items:[]}]});
+let S=blank(),C={...(matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT)};
+try{const d=localStorage.getItem('shimaa_data');if(d)S=JSON.parse(d);const c=localStorage.getItem('shimaa_colors');if(c)C={...C,...JSON.parse(c)}}catch(e){}
+S.deals=S.deals||[];const save=()=>{try{localStorage.setItem('shimaa_data',JSON.stringify(S))}catch(e){}};
+const saveC=()=>{try{localStorage.setItem('shimaa_colors',JSON.stringify(C))}catch(e){}};
+function applyC(){for(const k in C)document.body.style.setProperty('--'+k,C[k])}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1900)}
+const cl=id=>$(id).classList.remove('on'),op=id=>$(id).classList.add('on');
+function go(p){document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.p===p||(p==='notint'&&n.dataset.p==='leads')));document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$('p-'+p).classList.add('on');renderAll()}
+document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.p));
+$('today').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+const bn=id=>(S.buyers.find(b=>b.id===id)||{}).name||'';
+const city=b=>(b.city||'').trim();
+
+function renderAll(){rDeals();rDash();rBuyers();rBoard();rNI();rOffers();rTasks();rCity();rTpl();rColors()}
+function rDash(){const t=today();$('sB').textContent=S.buyers.length;$('sH').textContent=S.buyers.filter(b=>b.status==='hot').length;
+const due=S.tasks.filter(x=>!x.done&&x.dueDate&&x.dueDate<=t);$('sT').textContent=S.tasks.filter(x=>!x.done&&x.dueDate===t).length;
+$('dT').innerHTML=due.length?due.slice(0,6).map(trow).join(''):'<div class="empty">no tasks due</div>';
+const h=S.buyers.filter(b=>b.status==='hot');$('dH').innerHTML=h.length?h.slice(0,6).map(b=>`<div class="row"><div style="flex:1"><div class="t">${esc(b.name)}</div><div class="sub">${esc(city(b))}</div></div><button class="btn g s" onclick="buyerModal('${b.id}')">view</button></div>`).join(''):'<div class="empty">no hot leads</div>'}
+function brow(b){return `<div class="row"><div style="flex:1"><div><span class="t">${esc(b.name)}</span> <span class="badge ${b.status}">${b.status}</span> <span class="badge cold">★ ${b.rating}/10</span></div><div class="sub">${esc(b.phone||'no phone')} - ${esc(city(b)||'no city')}${b.state?', '+esc(b.state):''}</div></div><button class="btn g s" onclick="buyerModal('${b.id}')">edit</button></div>`}
+function rBuyers(){const q=($('bq').value||'').toLowerCase();const f=S.buyers.filter(b=>[b.name,b.city,b.state,b.address].join(' ').toLowerCase().includes(q));$('bList').innerHTML=f.length?f.map(brow).join(''):'<div class="empty">no buyers found</div>'}
+function rCity(){const q=($('cq').value||'').toLowerCase().trim();const cs=[...new Set(S.buyers.map(city).filter(Boolean))];
+$('cChips').innerHTML=cs.map(c=>`<span class="chip" onclick="$('cq').value='${esc(c)}';rCity()">${esc(c)}</span>`).join('');
+const f=S.buyers.filter(b=>!q||(city(b)+' '+(b.state||'')).toLowerCase().includes(q));$('cList').innerHTML=f.length?f.map(brow).join(''):'<div class="empty">no buyers in this city</div>'}
+function rOffers(){const a=[];S.buyers.forEach(b=>(b.offers||[]).forEach(o=>a.push({...o,who:b.name})));a.sort((x,y)=>y.date.localeCompare(x.date));
+$('oList').innerHTML=a.length?a.map(o=>`<div class="row"><div><div class="t">${esc(o.amount)} - ${esc(o.location)}</div><div class="sub">buyer: ${esc(o.who)} | ${esc(o.date)}</div></div></div>`).join(''):'<div class="empty">no offers yet</div>'}
+
+/* tasks */
+function trow(t){return `<div class="row"><input type="checkbox" style="width:auto;margin-top:3px" ${t.done?'checked':''} onchange="togTask('${t.id}')"><div style="flex:1"><div class="t" style="${t.done?'text-decoration:line-through;color:var(--soft)':''}">${esc(t.title)}</div><div class="sub">${esc(t.dueDate)} ${t.dueTime?'at '+esc(t.dueTime):''}${t.buyerId?' - @'+esc(bn(t.buyerId)):''}</div></div><button class="btn g s" onclick="taskModal('${t.id}')">edit</button></div>`}
+function rTasks(){$('tList').innerHTML=S.tasks.length?S.tasks.map(trow).join(''):'<div class="empty">no tasks yet</div>'}
+function togTask(id){const t=S.tasks.find(x=>x.id===id);t.done=!t.done;save();rDash();rTasks()}
+function taskModal(id){const t=S.tasks.find(x=>x.id===id);$('tBuyer').innerHTML='<option value="">none</option>'+S.buyers.map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join('');
+$('tmT').textContent=t?'edit task':'new task';$('tId').value=t?t.id:'';$('tTitle').value=t?t.title:'';$('tDate').value=t?t.dueDate:today();$('tTime').value=t?t.dueTime||'':'';$('tBuyer').value=t?t.buyerId||'':'';$('tNotes').value=t?t.notes||'':'';$('tDel').style.display=t?'inline-block':'none';op('tm')}
+function saveTask(){const title=$('tTitle').value.trim();if(!title)return toast('enter a title');const id=$('tId').value||uid();const old=S.tasks.find(x=>x.id===id);
+const t={id,title,dueDate:$('tDate').value||today(),dueTime:$('tTime').value,buyerId:$('tBuyer').value,notes:$('tNotes').value,done:old?old.done:false};
+if(old)Object.assign(old,t);else S.tasks.push(t);save();cl('tm');renderAll();toast('task saved')}
+function delTask(){S.tasks=S.tasks.filter(x=>x.id!==$('tId').value);save();cl('tm');renderAll()}
+
+/* buyers */
+let eo=[];
+$('bStage').innerHTML=STAGES.concat([['not_interested','Not Interested']]).map(s=>`<option value="${s[0]}">${s[1]}</option>`).join('');
+function buyerModal(id){const b=S.buyers.find(x=>x.id===id);eo=b?[...(b.offers||[])]:[];$('bmT').textContent=b?'edit buyer':'add buyer';$('bId').value=b?b.id:'';
+$('bName').value=b?b.name:'';$('bPhone').value=b?b.phone||'':'';$('bAddr').value=b?b.address||'':'';$('bCity').value=b?b.city||'':'';$('bState').value=b?b.state||'':'';
+$('bStatus').value=b?b.status:'hot';$('bRate').value=b?b.rating:7;$('bLead').checked=b?b.isLead!==false:true;$('bStage').value=b?b.leadStage||'new':'new';$('bNotes').value=b?b.notes||'':'';$('bDel').style.display=b?'inline-block':'none';rEO();op('bm')}
+function rEO(){$('bOffers').innerHTML=eo.length?eo.map((o,i)=>`<div class="row" style="padding:6px 0"><div style="flex:1" class="sub">${esc(o.amount)} - ${esc(o.location)} (${esc(o.date)})</div><button class="btn d s" onclick="eo.splice(${i},1);rEO()">x</button></div>`).join(''):'<div class="sub">no offers added</div>'}
+function addOffer(){const l=$('oLoc').value.trim(),a=$('oAmt').value.trim();if(!l||!a)return toast('enter place and amount');eo.push({location:l,amount:a,date:today()});$('oLoc').value=$('oAmt').value='';rEO()}
+function saveBuyer(){const name=$('bName').value.trim();if(!name)return toast('enter a name');const id=$('bId').value||uid();const old=S.buyers.find(x=>x.id===id)||{};
+const b={...old,id,name,phone:$('bPhone').value.trim(),address:$('bAddr').value.trim(),city:$('bCity').value.trim(),state:$('bState').value.trim().toUpperCase(),status:$('bStatus').value,rating:+$('bRate').value||7,isLead:$('bLead').checked,leadStage:$('bStage').value,notes:$('bNotes').value,offers:eo};
+b.log=old.log||[];if(old.id){const ch=['name','phone','address','city','state','status','rating','leadStage','notes'].filter(k=>String(old[k]??'')!==String(b[k]??''));Object.assign(old,b);lg(old,ch.length?'edited: '+ch.join(', '):'saved without changes')}else{S.buyers.push(b);lg(b,'buyer created'+(b.isLead?' in '+b.leadStage:''))}save();cl('bm');renderAll();toast('buyer saved')}
+function delBuyer(){sure('delete this buyer?',()=>{S.buyers=S.buyers.filter(x=>x.id!==$('bId').value);save();cl('bm');renderAll()})}
+
+/* leads board */
+let dragId=null;
+function rBoard(){const L=S.buyers.filter(b=>b.isLead!==false);
+$('board').innerHTML=STAGES.map(([id,label])=>{const it=L.filter(b=>(b.leadStage||'new')===id);
+return `<div class="col"><div class="ch" style="background:var(--st_${id})"><span>${label}</span><span>${it.length}</span></div><div class="cb" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropTo(event,'${id}');this.classList.remove('over')">${it.map(b=>`<div class="lc" draggable="true" ondragstart="dragId='${b.id}';this.classList.add('drag')" ondragend="this.classList.remove('drag')" onclick="if(!event.target.closest('.call')&&!event.target.closest('textarea'))buyerModal('${b.id}')"><div class="n">${esc(b.name)}</div><div class="sub">${esc(city(b)||'no city')} - ${esc(b.phone||'no phone')}</div><div style="margin-top:6px"><span class="badge ${b.status}">${b.status}</span></div><div class="call"><button onclick="logCall('${b.id}')">log call</button>${b.calls||0} call${(b.calls||0)===1?'':'s'}</div><textarea placeholder="add a note..." onchange="noteLead('${b.id}',this.value)">${esc(b.leadNote||'')}</textarea></div>`).join('')}</div></div>`}).join('');
+const n=L.filter(b=>b.leadStage==='not_interested').length;$('niZone').style.background='var(--st_not_interested)';$('niZone').textContent='Not Interested ('+n+') - drop here, click to open'}
+function dropTo(ev,st){ev.preventDefault();const b=S.buyers.find(x=>x.id===dragId);dragId=null;if(!b)return;const o=b.leadStage||'new';if(o===st)return;if(st==='not_interested')b.niGroup='';b.leadStage=st;lg(b,'moved '+o+' to '+st);save();renderAll()}
+function logCall(id){const b=S.buyers.find(x=>x.id===id);b.calls=(b.calls||0)+1;lg(b,'call #'+b.calls+' logged');save();rBoard();toast('call #'+b.calls+' logged')}
+function noteLead(id,v){const b=S.buyers.find(x=>x.id===id);b.leadNote=v;lg(b,'note: '+(v||'(cleared)'));save()}
+
+/* not interested page: auto grouped by city, manual override */
+const grp=b=>(b.niGroup||city(b)||'No city');
+function rNI(){const q=($('niQ').value||'').toLowerCase().trim();niSearching=!!q;const L=S.buyers.filter(b=>b.isLead!==false&&b.leadStage==='not_interested'&&(!q||[grp(b),b.name,b.phone,city(b)].join(' ').toLowerCase().includes(q)));
+if(!L.length){$('niList').innerHTML='<div class="card"><div class="empty">nothing here yet. drag leads to the Not Interested box</div></div>';return}
+const g={};L.forEach(b=>(g[grp(b)]=g[grp(b)]||[]).push(b));const names=Object.keys(g).sort();
+$('niList').innerHTML=names.map(n=>`<div class="card" style="margin-bottom:14px"><div class="ch" style="background:var(--st_not_interested);cursor:pointer" onclick="togG('${encodeURIComponent(n).replace(/'/g,'%27')}')"><span>${openG.has(n)?'▾':'▸'} ${esc(n)}</span><span>${g[n].length}</span></div>${openG.has(n)?g[n].map(b=>`<div class="row"><div style="flex:1"><div class="t" style="cursor:pointer;text-decoration:underline" onclick="profile('${b.id}')">${esc(b.name)}</div><div class="sub">${esc(b.phone||'no phone')} - city: ${esc(city(b)||'none')}${b.niGroup?' (group set by hand)':' (auto)'}</div>${b.leadNote?`<div class="sub">${esc(b.leadNote)}</div>`:''}</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn b s" onclick="profile('${b.id}')">profile</button><button class="btn g s" onclick="setGroup('${b.id}')">change group</button>${b.niGroup?`<button class="btn g s" onclick="setGroup('${b.id}',1)">auto</button>`:''}<button class="btn g s" onclick="backLead('${b.id}')">back to leads</button></div></div>`).join(''):''}</div>`).join('')}
+let niSearching=false;
+const openG={s:new Set(),has(n){return niSearching||this.s.has(n)},add(n){this.s.add(n)},delete(n){this.s.delete(n)}};
+let gId=null;
+function setGroup(id,auto){const b=S.buyers.find(x=>x.id===id);if(auto){b.niGroup='';lg(b,'group reset to auto ('+grp(b)+')');save();rNI();return}
+gId=id;const gs=[...new Set(S.buyers.filter(x=>x.isLead!==false&&x.leadStage==='not_interested').map(grp))].sort();$('gSel').innerHTML=gs.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('');$('gSel').value=grp(b);$('gNew').value='';op('gdlg')}
+function gOk(){const b=S.buyers.find(x=>x.id===gId);const n=$('gNew').value.trim()||$('gSel').value;if(!b||!n)return;b.niGroup=n;lg(b,'group changed to '+n);save();cl('gdlg');openG.add(n);rNI();toast('moved to '+n)}
+function togG(n){n=decodeURIComponent(n);openG.has(n)?openG.delete(n):openG.add(n);rNI()}
+function setGroupOld(id,auto){const b=S.buyers.find(x=>x.id===id);if(auto){b.niGroup='';save();openG.add(grp(b));rNI();return}
+ask('move to group (e.g. Dallas)',grp(b),v=>{b.niGroup=v.trim();save();openG.add(grp(b));rNI();toast('group changed')})}
+function backLead(id){const b=S.buyers.find(x=>x.id===id);b.leadStage='new';lg(b,'moved back to new');save();renderAll()}
+
+/* templates */
+function rTpl(){
+$('tpls').innerHTML=S.tpl.map(s=>`<div class="card tpl" style="background:${s.color||'var(--card)'}"><div class="th"><input value="${esc(s.name)}" oninput="renSec('${s.id}',this.value)"><button class="btn g s" onclick="addItem('${s.id}')">+ text</button><button class="btn d s" onclick="delSec('${s.id}')">delete section</button><input type="color" value="${s.color||C.card}" title="section color" style="flex:0 0 44px;width:44px;height:30px;padding:0;border:0;background:none" oninput="secColor('${s.id}',this.value,this)"></div>${s.items.length?s.items.map(i=>`<div class="ti"><textarea placeholder="write your text..." oninput="setItem('${s.id}','${i.id}',this.value)">${esc(i.text)}</textarea><div style="display:flex;flex-direction:column;gap:5px"><button class="btn b s" onclick="copyItem('${s.id}','${i.id}')">copy</button><button class="btn d s" onclick="delItem('${s.id}','${i.id}')">x</button></div></div>`).join(''):'<div class="sub">no texts yet. press + text</div>'}</div>`).join('')}
+const sec=id=>S.tpl.find(x=>x.id===id);
+function addSec(){ask('section name','',n=>{if(!n.trim())return;S.tpl.push({id:uid(),name:n.trim(),items:[]});save();rTpl()})}
+function renSec(id,v){sec(id).name=v;save()}
+function delSec(id){sure('delete this section and its texts?',()=>{S.tpl=S.tpl.filter(x=>x.id!==id);save();rTpl()})}
+function addItem(id){sec(id).items.push({id:uid(),text:''});save();rTpl()}
+function setItem(s,i,v){sec(s).items.find(x=>x.id===i).text=v;save()}
+function delItem(s,i){sec(s).items=sec(s).items.filter(x=>x.id!==i);save();rTpl()}
+function copyItem(s,i){const t=sec(s).items.find(x=>x.id===i).text;const done=()=>toast('copied');
+if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,()=>fb(t,done));else fb(t,done)}
+function fb(t,done){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){}a.remove()}
+
+/* settings colors */
+function rColors(){if(document.activeElement&&document.activeElement.type==='color')return;
+$('colors').innerHTML='<div class="cg">'+Object.keys(LABELS).map(k=>`<div><span>${LABELS[k]}</span><input type="color" value="${C[k]}" oninput="setColor('${k}',this.value)"></div>`).join('')+'</div>'}
+function setColor(k,v){C[k]=v;applyC();saveC()}
+function preset(p){C={...p};applyC();saveC();$('colors').innerHTML='';rColors();toast('colors updated')}
+/* in-page dialogs (prompt/confirm are blocked in hosted pages) */
+let dlgCb=null;
+function ask(t,v,cb){$('dlgT').textContent=t;$('dlgIn').style.display='';$('dlgIn').value=v;dlgCb=cb;op('dlg');$('dlgIn').focus()}
+function sure(t,cb){$('dlgT').textContent=t;$('dlgIn').style.display='none';dlgCb=cb;op('dlg')}
+function dlgOk(){const v=$('dlgIn').value,f=dlgCb;dlgCb=null;cl('dlg');if(f)f(v)}
+/* fonts */
+const FONTS=['Source Sans 3','Zilla Slab','Inter','Roboto','Open Sans','Lato','Poppins','Montserrat','Nunito','Cairo','Tajawal','Merriweather','Playfair Display','Georgia','Arial'];
+let F={fh:'Zilla Slab',fb:'Source Sans 3',zoom:100};
+try{const f=localStorage.getItem('shimaa_font');if(f)F={...F,...JSON.parse(f)}}catch(e){}
+function loadFont(n){if(['Georgia','Arial'].includes(n)||document.getElementById('f_'+n))return;const l=document.createElement('link');l.id='f_'+n;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+n.replace(/ /g,'+')+':wght@400;600;700&display=swap';document.head.appendChild(l)}
+function applyF(){loadFont(F.fh);loadFont(F.fb);document.body.style.setProperty('--fh',"'"+F.fh+"'");document.body.style.setProperty('--fb',"'"+F.fb+"'");document.body.style.zoom=F.zoom/100}
+function setF(){F.fh=$('fH').value;F.fb=$('fB').value;F.zoom=+$('fZ').value;$('fZv').textContent=F.zoom;applyF();try{localStorage.setItem('shimaa_font',JSON.stringify(F))}catch(e){}}
+const fopts=FONTS.map(f=>`<option>${f}</option>`).join('');$('fH').innerHTML=fopts;$('fB').innerHTML=fopts;$('fH').value=F.fh;$('fB').value=F.fb;$('fZ').value=F.zoom;$('fZv').textContent=F.zoom;
+/* AI */
+const DM={gemini:'gemini-2.0-flash',openai:'gpt-4o-mini'};
+let AI={prov:'gemini',model:DM.gemini,key:''};
+try{const a=localStorage.getItem('shimaa_ai');if(a)AI={...AI,...JSON.parse(a)}}catch(e){}
+$('aiProv').value=AI.prov;$('aiModel').value=AI.model;$('aiKey').value=AI.key;
+function aiProvChange(){const p=$('aiProv').value,m=$('aiModel').value;if(m===DM.gemini||m===DM.openai||!m)$('aiModel').value=DM[p]}
+function aiSave(){AI={prov:$('aiProv').value,model:$('aiModel').value.trim()||DM[$('aiProv').value],key:$('aiKey').value.trim()};try{localStorage.setItem('shimaa_ai',JSON.stringify(AI))}catch(e){}toast('AI settings saved')}
+async function aiCall(sys,q){if(!AI.key)throw new Error('add your api key in settings first');
+if(AI.prov==='gemini'){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+AI.model+':generateContent?key='+AI.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:sys+'\n\nUser: '+q}]}]})});const d=await r.json();if(d.error)throw new Error(d.error.message);return(d.candidates?.[0]?.content?.parts||[]).map(p=>p.text).join('')||'no response'}
+const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+AI.key},body:JSON.stringify({model:AI.model,messages:[{role:'system',content:sys},{role:'user',content:q}]})});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.choices?.[0]?.message?.content||'no response'}
+async function aiTest(){aiSave();try{await aiCall('Reply briefly.','say ok');toast('connection works')}catch(e){toast('failed: '+e.message)}}
+async function askAI(){const i=$('aiQ'),q=i.value.trim();if(!q)return;const L=$('aiL');L.innerHTML+=`<div class="am u">${esc(q)}</div>`;i.value='';L.scrollTop=L.scrollHeight;
+const sys='You are a brief assistant inside Shimaa CRM, a real estate buyers CRM. Today is '+today()+'. Buyers: '+JSON.stringify(S.buyers.map(b=>({name:b.name,phone:b.phone,city:b.city,state:b.state,status:b.status,rating:b.rating,stage:b.leadStage,notes:b.notes})))+'. Tasks: '+JSON.stringify(S.tasks.map(t=>({title:t.title,due:t.dueDate,done:t.done})));
+try{const a=await aiCall(sys,q);L.innerHTML+=`<div class="am a">${esc(a)}</div>`}catch(e){L.innerHTML+=`<div class="am a">error: ${esc(e.message)}. if you see a network error, the page may block outside connections. open the file from your computer or your own site</div>`}L.scrollTop=L.scrollHeight}
+function secColor(id,v,el){sec(id).color=v;save();el.closest('.tpl').style.background=v}
+function lg(b,x){(b.log=b.log||[]).push({t:new Date().toISOString(),x:x})}
+/* lead profile */
+function profile(id){const b=S.buyers.find(x=>x.id===id);if(!b)return;
+$('pmBody').innerHTML=`<h2>${esc(b.name)}</h2><div class="sub">${esc(b.phone||'no phone')} - ${esc([b.address,city(b),b.state].filter(Boolean).join(', ')||'no address')}</div><div style="margin:8px 0"><span class="badge ${b.status}">${b.status}</span> <span class="badge cold">★ ${b.rating}/10</span> <span class="badge warm">${esc(b.leadStage||'new')}</span> <span class="badge cold">group: ${esc(grp(b))}</span> <span class="badge cold">${b.calls||0} calls</span></div>${b.notes?`<div class="f"><label>notes</label><div>${esc(b.notes)}</div></div>`:''}${b.leadNote?`<div class="f"><label>lead note</label><div>${esc(b.leadNote)}</div></div>`:''}${(b.offers||[]).length?`<div class="f"><label>offers</label>${b.offers.map(o=>`<div class="sub">${esc(o.amount)} - ${esc(o.location)} (${esc(o.date)})</div>`).join('')}</div>`:''}<div class="f"><label>history</label>${(b.log||[]).length?[...b.log].reverse().map(e=>`<div class="lg"><small>${new Date(e.t).toLocaleString()}</small>${esc(e.x)}</div>`).join(''):'<div class="sub">no history yet</div>'}</div><div class="acts"><button class="btn g" onclick="cl('pm')">close</button><button class="btn b" onclick="cl('pm');buyerModal('${b.id}')">edit</button></div>`;op('pm')}
+/* address autofill */
+const STATES='AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
+function parseAddr(a){const p=a.split(',').map(x=>x.trim()).filter(Boolean);if(p.length<2)return null;const last=p[p.length-1];let m=last.match(/^([A-Za-z]{2})(\s+\d{5}(-\d{4})?)?$/);
+if(m&&STATES.includes(m[1].toUpperCase())&&p.length>=2)return{ct:p[p.length-2].replace(/\s*\d{5}.*$/,''),st:m[1].toUpperCase()};
+m=last.match(/^(.+?)\s+([A-Za-z]{2})(\s+\d{5}(-\d{4})?)?$/);if(m&&STATES.includes(m[2].toUpperCase()))return{ct:m[1],st:m[2].toUpperCase()};return null}
+async function autoAddr(){const a=$('bAddr').value.trim();if(!a)return;let r=parseAddr(a);
+if(!r){try{const d=await (await fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q='+encodeURIComponent(a))).json();const x=d[0]&&d[0].address;if(x){const iso=(x['ISO3166-2-lvl4']||'').split('-')[1]||'';r={ct:x.city||x.town||x.village||x.county||'',st:iso}}}catch(e){}}
+if(r&&r.ct){$('bCity').value=r.ct;if(r.st)$('bState').value=r.st;toast('city and state filled from address')}}
+/* file storage (IndexedDB) */
+const idb=new Promise(res=>{try{const r=indexedDB.open('shimaa_files',1);r.onupgradeneeded=()=>r.result.createObjectStore('f');r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)}catch(e){res(null)}});
+async function fput(id,blob){const db=await idb;if(!db)return false;return new Promise(r=>{try{const t=db.transaction('f','readwrite');t.objectStore('f').put(blob,id);t.oncomplete=()=>r(true);t.onerror=()=>r(false)}catch(e){r(false)}})}
+async function fget(id){const db=await idb;if(!db)return null;return new Promise(r=>{try{const q=db.transaction('f').objectStore('f').get(id);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null)}catch(e){r(null)}})}
+async function fdel(id){const db=await idb;if(!db)return;try{db.transaction('f','readwrite').objectStore('f').delete(id)}catch(e){}}
+function hydrate(root){root.querySelectorAll('[data-f]').forEach(async el=>{const b=await fget(el.dataset.f);if(b)el.src=URL.createObjectURL(b)})}
+/* closed deals */
+let ed=null;
+function rDeals(){const g=$('dGrid');if(!g)return;g.innerHTML=S.deals.length?S.deals.map(d=>`<div class="dc" onclick="dealModal('${d.id}')">${d.photos&&d.photos[0]?`<img data-f="${d.photos[0].id}">`:''}<div class="t">${esc(d.address||'no address')}</div><div class="sub">buyer: ${esc(d.buyer||'-')}</div><div class="sub">${(d.photos||[]).length} photos - ${(d.calls||[]).length} calls</div></div>`).join(''):'<div class="card"><div class="empty">no closed deals yet</div></div>';hydrate(g)}
+function dealModal(id){const d=S.deals.find(x=>x.id===id);ed=d?JSON.parse(JSON.stringify(d)):{id:uid(),address:'',info:'',buyer:'',notes:'',photos:[],calls:[]};
+$('dAddr').value=ed.address;$('dInfo').value=ed.info||'';$('dBuyer').value=ed.buyer||'';$('dNotes').value=ed.notes||'';$('dBL').innerHTML=S.buyers.map(b=>`<option value="${esc(b.name)}">`).join('');$('dDel').style.display=d?'inline-block':'none';rDM();op('dm')}
+function rDM(){$('dPh').innerHTML=ed.photos.map((p,i)=>`<div class="ph"><img data-f="${p.id}"><button class="btn d s" onclick="ed.photos.splice(${i},1);rDM()">x</button></div>`).join('');
+$('dCl').innerHTML=ed.calls.map((c,i)=>`<div class="row" style="padding:6px 0;flex-wrap:wrap"><div class="sub" style="flex:1 1 100%">${esc(c.name)}</div><audio controls data-f="${c.id}" style="flex:1;min-width:0"></audio><button class="btn d s" onclick="ed.calls.splice(${i},1);rDM()">x</button></div>`).join('');hydrate($('dm'))}
+async function upFiles(inp,kind){for(const f of inp.files){const id=uid();if(await fput(id,f))ed[kind].push({id,name:f.name});else toast('file storage not available here')}inp.value='';rDM()}
+function saveDeal(){const a=$('dAddr').value.trim();if(!a)return toast('enter the address');ed.address=a;ed.info=$('dInfo').value;ed.buyer=$('dBuyer').value.trim();ed.notes=$('dNotes').value;
+const i=S.deals.findIndex(x=>x.id===ed.id);if(i>=0){const keep=new Set([...ed.photos,...ed.calls].map(x=>x.id));[...S.deals[i].photos,...S.deals[i].calls].filter(x=>!keep.has(x.id)).forEach(x=>fdel(x.id));S.deals[i]=ed}else S.deals.push(ed);
+save();cl('dm');renderAll();toast('deal saved')}
+function delDeal(){sure('delete this deal and its files?',()=>{const d=S.deals.find(x=>x.id===ed.id);if(d)[...d.photos,...d.calls].forEach(x=>fdel(x.id));S.deals=S.deals.filter(x=>x.id!==ed.id);save();cl('dm');renderAll()})}
+applyF();applyC();renderAll();
+</script></body></html>
