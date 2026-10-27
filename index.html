@@ -233,20 +233,28 @@ function applyF(){loadFont(F.fh);loadFont(F.fb);document.body.style.setProperty(
 function setF(){F.fh=$('fH').value;F.fb=$('fB').value;F.zoom=+$('fZ').value;$('fZv').textContent=F.zoom;applyF();try{localStorage.setItem('shimaa_font',JSON.stringify(F))}catch(e){}}
 const fopts=FONTS.map(f=>`<option>${f}</option>`).join('');$('fH').innerHTML=fopts;$('fB').innerHTML=fopts;$('fH').value=F.fh;$('fB').value=F.fb;$('fZ').value=F.zoom;$('fZv').textContent=F.zoom;
 /* AI */
-const DM={gemini:'gemini-3.8-flash',openai:'gpt-4o-mini'};
+const DM={gemini:'gemini-3.8-flash'};
 let AI={prov:'gemini',model:DM.gemini,key:''};
 try{const a=localStorage.getItem('shimaa_ai');if(a)AI={...AI,...JSON.parse(a)}}catch(e){}
-$('aiProv').value=AI.prov;$('aiModel').value=AI.model;$('aiKey').value=AI.key;
-function aiProvChange(){const p=$('aiProv').value,m=$('aiModel').value;if(m===DM.gemini||m===DM.openai||!m)$('aiModel').value=DM[p]}
-function aiSave(){AI={prov:$('aiProv').value,model:$('aiModel').value.trim()||DM[$('aiProv').value],key:$('aiKey').value.trim()};try{localStorage.setItem('shimaa_ai',JSON.stringify(AI))}catch(e){}toast('AI settings saved')}
-async function aiCall(sys,q){if(!AI.key)throw new Error('add your api key in settings first');
-if(AI.prov==='gemini'){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+AI.model+':generateContent?key='+AI.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:sys+'\n\nUser: '+q}]}]})});const d=await r.json();if(d.error)throw new Error(d.error.message);return(d.candidates?.[0]?.content?.parts||[]).map(p=>p.text).join('')||'no response'}
-const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+AI.key},body:JSON.stringify({model:AI.model,messages:[{role:'system',content:sys},{role:'user',content:q}]})});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.choices?.[0]?.message?.content||'no response'}
+if($('aiModel')) $('aiModel').value=AI.model;
+if($('aiKey')) $('aiKey').value=AI.key;
+function aiSave(){let AI={prov:'gemini',model:$('aiModel')?$('aiModel').value.trim():DM.gemini,key:$('aiKey')?$('aiKey').value.trim():''};try{localStorage.setItem('shimaa_ai',JSON.stringify(AI))}catch(e){}}
+async function aiCall(sys,q){
+  if(!AI.key)throw new Error('add your api key in settings first');
+  let r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+AI.model+':generateContent?key='+AI.key,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:sys+'\n'+q}]}]})
+  });
+  let data=await r.json();
+  if(!r.ok)throw new Error(data.error?.message||'Gemini error');
+  return data.candidates[0].content.parts[0].text;
+}
 async function aiTest(){aiSave();try{await aiCall('Reply briefly.','say ok');toast('connection works')}catch(e){toast('failed: '+e.message)}}
 async function askAI(){const i=$('aiQ'),q=i.value.trim();if(!q)return;const L=$('aiL');L.innerHTML+=`<div class="am u">${esc(q)}</div>`;i.value='';L.scrollTop=L.scrollHeight;
-const sys='You are a brief assistant inside Shimaa CRM, a real estate buyers CRM. Today is '+today()+'. Buyers: '+JSON.stringify(S.buyers.map(b=>({name:b.name,phone:b.phone,city:b.city,state:b.state,status:b.status,rating:b.rating,stage:b.leadStage,notes:b.notes})))+'. Tasks: '+JSON.stringify(S.tasks.map(t=>({title:t.title,due:t.dueDate,done:t.done})));
-try{const a=await aiCall(sys,q);L.innerHTML+=`<div class="am a">${esc(a)}</div>`}catch(e){L.innerHTML+=`<div class="am a">error: ${esc(e.message)}. if you see a network error, the page may block outside connections. open the file from your computer or your own site</div>`}L.scrollTop=L.scrollHeight}
-function secColor(id,v,el){sec(id).color=v;save();el.closest('.tpl').style.background=v}
+const sys='You are a brief assistant inside Shimaa CRM, a real estate buyers CRM. Today is '+today+'. Buyers: '+JSON.stringify(S.buyers.map(b=>({name:b.name,phone:b.phone,city:b.city,budget:b.budget,interest:b.interest,status:b.status})))+'.';
+try{const a=await aiCall(sys,q);L.innerHTML+=`<div class="am a">${esc(a)}</div>`;L.scrollTop=L.scrollHeight}
+catch(e){L.innerHTML+=`<div class="am a">error: ${esc(e.message)}</div>`}}
 function lg(b,x){(b.log=b.log||[]).push({t:new Date().toISOString(),x:x})}
 /* lead profile */
 function profile(id){const b=S.buyers.find(x=>x.id===id);if(!b)return;
