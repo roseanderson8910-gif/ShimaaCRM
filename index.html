@@ -50,8 +50,8 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--soft);margin-bo
 .cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
 .cg div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px}
 .cg input{width:44px;height:30px;padding:0;border:0;background:none}
-.toast{position:fixed;bottom:18px;left:18px;background:var(--ink);color:var(--paper);padding:11px 16px;border-radius:6px;opacity:0;transition:.25s;pointer-events:none;z-index:99}.toast.on{opacity:1}
-#aiB{position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;background:var(--brick);color:#fff;border:0;font-size:22px;z-index:40}#aiP{display:none;position:fixed;bottom:80px;right:18px;width:340px;max-width:calc(100vw - 36px);height:440px;max-height:70vh;background:var(--card);border:1px solid var(--line);border-radius:10px;z-index:40;flex-direction:column;overflow:hidden}#aiP.on{display:flex}#aiL{flex:1;overflow:auto;padding:10px}.am{padding:8px 11px;border-radius:9px;margin-bottom:8px;font-size:14px;white-space:pre-wrap}.am.u{background:var(--ink);color:var(--paper);margin-left:auto;max-width:85%}.am.a{background:var(--tsoft);max-width:92%}#aiP .ir{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}
+.toast{position:fixed;bottom:18px;left:18px;background:var(--ink);color:var(--paper);padding:11px 16px;border-radius:6px;opacity:0;transition:.25s;pointer-events:none;z-index:99;max-width:80vw}.toast.on{opacity:1}
+#aiB{position:fixed;bottom:18px;right:18px;width:52px;height:52px;border-radius:50%;background:var(--brick);color:#fff;border:0;font-size:22px;z-index:40}#aiP{display:none;position:fixed;bottom:80px;right:18px;width:340px;max-width:calc(100vw - 36px);height:440px;max-height:70vh;background:var(--card);border:1px solid var(--line);border-radius:10px;z-index:40;flex-direction:column;overflow:hidden}#aiP.on{display:flex}#aiL{flex:1;overflow:auto;padding:10px}.am{padding:8px 11px;border-radius:9px;margin-bottom:8px;font-size:14px;white-space:pre-wrap}.am.u{background:var(--ink);color:var(--paper);margin-left:auto;max-width:85%}.am.a{background:var(--tsoft);max-width:92%}#aiP .ir{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line);align-items:center}
 .dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.dc{background:var(--deal);border:1px solid var(--line);border-radius:8px;padding:12px;cursor:pointer;color:var(--ink)}.dc img{width:100%;height:120px;object-fit:cover;border-radius:5px;margin-bottom:8px}.th2{display:flex;flex-wrap:wrap;gap:8px}.th2 .ph{position:relative}.th2 img{width:96px;height:80px;object-fit:cover;border-radius:5px}.th2 .ph button{position:absolute;top:2px;right:2px;padding:0 6px}.lg{border-left:2px solid var(--line);padding:2px 0 8px 10px;font-size:13px}.lg small{color:var(--soft);display:block}
 #micBar{display:none;position:fixed;z-index:80;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:3px}#micBar.on{display:flex}#micBtn.rec{background:#c0392b;border-color:#c0392b;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.6}}
 #mascot{position:fixed;z-index:60;width:var(--ms,64px);height:var(--ms,64px);cursor:grab;touch-action:none;user-select:none;display:none}#mascot.on{display:block}
@@ -87,7 +87,7 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--soft);margin-bo
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>voice notes</b><p class="sub">a mic button shows on every notes box</p><label>speech language</label><select id="micSel" onchange="micSet(this.value)"><option value="ar-EG">Arabic (Egypt)</option><option value="en-US">English</option></select></div>
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>Google Maps (ECO deals)</b><p class="sub">optional key for exact distances. without it the site tries OpenStreetMap, and "locate with Gemini" gives approximate places</p><input id="gKey" type="password" placeholder="Google Maps API key"><button class="btn b s" style="margin-top:8px" onclick="ECO.gkey=$('gKey').value.trim();try{localStorage.setItem('shimaa_eco',JSON.stringify(ECO))}catch(e){}toast('saved')">save</button></div>
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>font</b><div class="fr" style="margin-top:10px"><div class="f"><label>headings font</label><select id="fH" onchange="setF()"></select></div><div class="f"><label>body font</label><select id="fB" onchange="setF()"></select></div></div><div class="f"><label>text size: <span id="fZv"></span>%</label><input type="range" id="fZ" min="80" max="130" step="5" oninput="setF()"></div></div>
-<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>Gemini AI</b><p class="sub">paste a free key from aistudio.google.com/apikey. it is used for the chat button, reading ECO screenshots and locating deals. the key stays in this browser</p><div class="f"><label>model</label><input id="aiModel"></div><div class="f"><label>api key</label><input type="password" id="aiKey" placeholder="paste your Gemini api key"></div><button class="btn b s" onclick="aiSave()">save</button> <button class="btn g s" onclick="aiTest()">test connection</button></div>
+<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>Gemini AI</b><p class="sub">paste a free key from aistudio.google.com/apikey. it is used for the chat button (full access to all your data), reading ECO screenshots and locating deals. the key stays in this browser</p><div class="f"><label>model</label><input id="aiModel"></div><div class="f"><label>api key</label><input type="password" id="aiKey" placeholder="paste your Gemini api key"></div><button class="btn b s" onclick="aiSave()">save</button> <button class="btn g s" onclick="aiTest()">test connection</button></div>
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>data</b><p class="sub">everything is saved in this browser</p><button class="btn d s" onclick="sure('erase all data?',()=>{S=blank();save();renderAll()})">erase all data</button></div></div>
 </div></div>
 
@@ -112,7 +112,7 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--soft);margin-bo
 <div class="mbg" id="mvdlg" style="z-index:70"><div class="modal" style="max-width:380px"><h2 style="font-size:18px">move deal to market</h2><div class="f"><label>pick an existing market</label><select id="mvSel"></select></div><div class="f"><label>or create a new market</label><input id="mvNew" placeholder="e.g. Houston, TX"></div><div class="acts"><button class="btn g" onclick="cl('mvdlg')">cancel</button><button class="btn b" onclick="mvOk()">move</button></div></div></div>
 <div class="mbg" id="dm"><div class="modal" style="max-width:600px;background:var(--deal)"><h2>closed deal</h2><div class="f"><label>property address</label><input id="dAddr"></div><div class="f"><label>info about the house</label><textarea id="dInfo" rows="3"></textarea></div><div class="f"><label>photos</label><input type="file" accept="image/*" multiple onchange="upFiles(this,'photos')"><div class="th2" id="dPh" style="margin-top:8px"></div></div><div class="f"><label>buyer who bought</label><input id="dBuyer" list="dBL"><datalist id="dBL"></datalist></div><div class="f"><label>notes</label><textarea id="dNotes" rows="3"></textarea></div><div class="f"><label>calls (audio files)</label><input type="file" accept="audio/*" multiple onchange="upFiles(this,'calls')"><div id="dCl"></div></div><div class="acts"><button class="btn g" onclick="cl('dm')">cancel</button><button class="btn d" id="dDel" onclick="delDeal()">delete</button><button class="btn b" onclick="saveDeal()">save</button></div></div></div>
 <div class="mbg" id="dlg" style="z-index:70"><div class="modal" style="max-width:380px"><h2 id="dlgT" style="font-size:18px"></h2><input id="dlgIn" onkeydown="if(event.key==='Enter')dlgOk()"><div class="acts"><button class="btn g" onclick="cl('dlg')">cancel</button><button class="btn b" onclick="dlgOk()">ok</button></div></div></div>
-<button id="aiB" onclick="$('aiP').classList.toggle('on')">✦</button><div id="aiP"><div id="aiL"></div><div class="ir"><textarea id="aiQ" rows="1" placeholder="ask about your CRM..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askAI()}"></textarea><button class="btn b s" onclick="askAI()">send</button></div></div>
+<button id="aiB" onclick="$('aiP').classList.toggle('on')">✦</button><div id="aiP"><div id="aiL"></div><div class="ir"><label class="btn g s" style="margin:0;cursor:pointer" title="send ECO screenshots">📎<input type="file" accept="image/*" multiple style="display:none" onchange="chatShot(this)"></label><textarea id="aiQ" rows="1" placeholder="ask or tell me to change anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askAI()}"></textarea><button class="btn b s" onclick="askAI()">send</button></div></div>
 <div id="mascot"></div>
 <div id="micBar" onpointerdown="event.preventDefault()"><button class="btn b s" id="micBtn" onclick="micToggle()">🎙</button><button class="btn g s" id="micLang" onclick="micSet(MIC.lang==='ar-EG'?'en-US':'ar-EG')">AR</button></div>
 <div class="toast" id="toast"></div>
@@ -129,10 +129,10 @@ const LABELS={paper:'main screen background',card:'cards and boxes',ink:'text',s
 const blank=()=>({buyers:[],tasks:[],deals:[],eco:[],tpl:[{id:uid(),name:'Intro',items:[]},{id:uid(),name:'Follow up',items:[]},{id:uid(),name:'No answer',items:[]},{id:uid(),name:'Extras',items:[]}]});
 let S=blank(),C={...(matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT)};
 try{const d=localStorage.getItem('shimaa_data');if(d)S=JSON.parse(d);const c=localStorage.getItem('shimaa_colors');if(c)C={...C,...JSON.parse(c)}}catch(e){}
-S.deals=S.deals||[];S.eco=S.eco||[];S.cc=S.cc||{};const save=()=>{try{localStorage.setItem('shimaa_data',JSON.stringify(S))}catch(e){}};
+S.buyers=S.buyers||[];S.tasks=S.tasks||[];S.tpl=S.tpl||[];S.deals=S.deals||[];S.eco=S.eco||[];S.cc=S.cc||{};const save=()=>{try{localStorage.setItem('shimaa_data',JSON.stringify(S))}catch(e){}};
 const saveC=()=>{try{localStorage.setItem('shimaa_colors',JSON.stringify(C))}catch(e){}};
 function applyC(){for(const k in C)document.body.style.setProperty('--'+k,C[k])}
-function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1900)}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),m.length>60?4500:1900)}
 const cl=id=>$(id).classList.remove('on'),op=id=>$(id).classList.add('on');
 function go(p){document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.p===p||(p==='notint'&&n.dataset.p==='leads')));document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));$('p-'+p).classList.add('on');renderAll()}
 document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.p));
@@ -150,7 +150,7 @@ function rBuyers(){const q=($('bq').value||'').toLowerCase();const f=S.buyers.fi
 function rCity(){const q=($('cq').value||'').toLowerCase().trim();const cs=[...new Set(S.buyers.map(city).filter(Boolean))];
 $('cChips').innerHTML=cs.map(c=>`<span class="chip" onclick="$('cq').value='${esc(c)}';rCity()">${esc(c)}</span>`).join('');
 const f=S.buyers.filter(b=>!q||(city(b)+' '+(b.state||'')).toLowerCase().includes(q));$('cList').innerHTML=f.length?f.map(brow).join(''):'<div class="empty">no buyers in this city</div>'}
-function rOffers(){const a=[];S.buyers.forEach(b=>(b.offers||[]).forEach(o=>a.push({...o,who:b.name})));a.sort((x,y)=>y.date.localeCompare(x.date));
+function rOffers(){const a=[];S.buyers.forEach(b=>(b.offers||[]).forEach(o=>a.push({...o,who:b.name})));a.sort((x,y)=>(y.date||'').localeCompare(x.date||''));
 $('oList').innerHTML=a.length?a.map(o=>`<div class="row"><div><div class="t">${esc(o.amount)} - ${esc(o.location)}</div><div class="sub">buyer: ${esc(o.who)} | ${esc(o.date)}</div></div></div>`).join(''):'<div class="empty">no offers yet</div>'}
 
 /* tasks */
@@ -200,8 +200,6 @@ function setGroup(id,auto){const b=S.buyers.find(x=>x.id===id);if(auto){b.niGrou
 gId=id;const gs=[...new Set(S.buyers.filter(x=>x.isLead!==false&&x.leadStage==='not_interested').map(grp))].sort();$('gSel').innerHTML=gs.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('');$('gSel').value=grp(b);$('gNew').value='';op('gdlg')}
 function gOk(){const b=S.buyers.find(x=>x.id===gId);const n=$('gNew').value.trim()||$('gSel').value;if(!b||!n)return;b.niGroup=n;lg(b,'group changed to '+n);save();cl('gdlg');openG.add(n);rNI();toast('moved to '+n)}
 function togG(n){n=decodeURIComponent(n);openG.has(n)?openG.delete(n):openG.add(n);rNI()}
-function setGroupOld(id,auto){const b=S.buyers.find(x=>x.id===id);if(auto){b.niGroup='';save();openG.add(grp(b));rNI();return}
-ask('move to group (e.g. Dallas)',grp(b),v=>{b.niGroup=v.trim();save();openG.add(grp(b));rNI();toast('group changed')})}
 function backLead(id){const b=S.buyers.find(x=>x.id===id);b.leadStage='new';lg(b,'moved back to new');save();renderAll()}
 
 /* templates */
@@ -236,24 +234,85 @@ function loadFont(n){if(['Georgia','Arial'].includes(n)||document.getElementById
 function applyF(){loadFont(F.fh);loadFont(F.fb);document.body.style.setProperty('--fh',"'"+F.fh+"'");document.body.style.setProperty('--fb',"'"+F.fb+"'");document.body.style.zoom=F.zoom/100}
 function setF(){F.fh=$('fH').value;F.fb=$('fB').value;F.zoom=+$('fZ').value;$('fZv').textContent=F.zoom;applyF();try{localStorage.setItem('shimaa_font',JSON.stringify(F))}catch(e){}}
 const fopts=FONTS.map(f=>`<option>${f}</option>`).join('');$('fH').innerHTML=fopts;$('fB').innerHTML=fopts;$('fH').value=F.fh;$('fB').value=F.fb;$('fZ').value=F.zoom;$('fZv').textContent=F.zoom;
-/* Gemini AI (chat, screenshot reading, locating) */
+
+/* ================= Gemini AI ================= */
 const GM='gemini-3.5-flash';
 let AI={model:GM,key:''};
 try{const a=localStorage.getItem('shimaa_ai');if(a){const o=JSON.parse(a);AI.key=o.key||'';AI.model=(o.model&&/^gemini/i.test(o.model)&&o.model!=='gemini-2.0-flash')?o.model:GM}}catch(e){}
 $('aiModel').value=AI.model;$('aiKey').value=AI.key;
 function aiSave(){AI={model:$('aiModel').value.trim()||GM,key:$('aiKey').value.trim()};try{localStorage.setItem('shimaa_ai',JSON.stringify(AI))}catch(e){}toast('Gemini settings saved')}
-async function aiCall(sys,q,imgs,json){if(!AI.key)throw new Error('add your Gemini api key in settings first');
+async function aiCall(sys,q,imgs,json,hist){if(!AI.key)throw new Error('add your Gemini api key in settings first');
 const parts=[{text:q}].concat((imgs||[]).map(i=>({inlineData:{mimeType:i.mime,data:i.data}})));
-const body={systemInstruction:{parts:[{text:sys}]},contents:[{role:'user',parts}]};if(json)body.generationConfig={responseMimeType:'application/json'};
+const body={systemInstruction:{parts:[{text:sys}]},contents:(hist||[]).concat([{role:'user',parts}]),generationConfig:{temperature:0}};if(json)body.generationConfig.responseMimeType='application/json';
 let r;try{r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(AI.model)+':generateContent?key='+encodeURIComponent(AI.key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}catch(e){throw new Error('network blocked or offline')}
 const d=await r.json().catch(()=>({}));if(d.error)throw new Error(d.error.message||('Gemini error '+r.status));
 const t=((d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts)||[]).map(p=>p.text||'').join('').trim();
 if(!t)throw new Error(d.promptFeedback&&d.promptFeedback.blockReason?'blocked: '+d.promptFeedback.blockReason:'empty answer');return t}
 const b64=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res({mime:f.type||'image/png',data:String(r.result).split(',')[1]});r.onerror=()=>rej(new Error('could not read the image file'));r.readAsDataURL(f)});
 async function aiTest(){aiSave();toast('testing...');try{await aiCall('Reply briefly.','say ok');toast('Gemini works')}catch(e){toast('failed: '+e.message)}}
+const jsonOf=t=>JSON.parse(t.match(/[\[{][\s\S]*[\]}]/)[0]);
+
+/* ---- chat with full access ---- */
+const pick=(o,ks)=>{const r={};ks.forEach(k=>{if(o&&o[k]!==undefined)r[k]=o[k]});return r};
+const BF=['name','phone','address','city','state','status','rating','showing','pShowing','offerMade','pOffer','isLead','leadStage','notes','leadNote','calls','niGroup'];
+const EF=['address','city','state','type','price','beds','baths','sqft','notes'];
+const TKF=['title','dueDate','dueTime','buyerId','notes','done'];
+const DFF=['address','info','buyer','notes'];
+function aiState(){return JSON.stringify({
+buyers:S.buyers.map(b=>({id:b.id,...pick(b,BF),offers:b.offers||[]})),
+tasks:S.tasks.map(t=>({id:t.id,...pick(t,TKF)})),
+eco:S.eco.map(d=>({id:d.id,market:mkey(d),...pick(d,EF),trashed:!!d.trashed})),
+deals:S.deals.map(d=>({id:d.id,...pick(d,DFF)})),
+templates:S.tpl.map(s=>({id:s.id,name:s.name,items:s.items.map(i=>({id:i.id,text:i.text}))}))})}
+const fixD=o=>{if(o.status&&!['hot','warm','cold'].includes(o.status))o.status='warm';
+if(o.leadStage&&!['new','voicemail','follow_up','not_interested'].includes(o.leadStage))o.leadStage='new';
+if(o.state)o.state=String(o.state).toUpperCase();
+if(o.type)o.type=ECO_T.find(x=>x.toLowerCase()===String(o.type).toLowerCase())||ECO_T[0];
+if(o.rating!==undefined)o.rating=Math.min(10,Math.max(1,+o.rating||7));return o};
+function runAct(a){const D=a.data||{};const get=arr=>{const x=arr.find(y=>y.id===a.id);if(!x)throw new Error('id not found: '+a.id);return x};
+switch(a.op){
+case 'add_buyer':{const b={id:uid(),name:'',status:'warm',rating:7,isLead:true,leadStage:'new',offers:[],log:[],...fixD(pick(D,BF))};
+if(b.address&&!b.city){const p=parseAddr(b.address);if(p){b.city=p.ct;b.state=b.state||p.st}}
+if(!b.name)throw new Error('name required');S.buyers.push(b);lg(b,'created by AI');return 'buyer added: '+b.name}
+case 'update_buyer':{const b=get(S.buyers),o=b.leadStage;const p=fixD(pick(D,BF));
+if(p.leadStage==='not_interested'&&o!=='not_interested'&&D.niGroup===undefined)b.niGroup='';
+Object.assign(b,p);lg(b,'edited by AI: '+Object.keys(p).join(', '));return 'buyer updated: '+b.name}
+case 'delete_buyer':{const b=get(S.buyers);S.buyers=S.buyers.filter(x=>x!==b);return 'buyer deleted: '+b.name}
+case 'add_offer':{const b=get(S.buyers);(b.offers=b.offers||[]).push({location:D.location||'',amount:D.amount||'',date:today()});lg(b,'offer added by AI');return 'offer added to '+b.name}
+case 'log_call':{const b=get(S.buyers);b.calls=(b.calls||0)+1;lg(b,'call #'+b.calls+' logged');return 'call logged: '+b.name}
+case 'add_task':{const t={id:uid(),title:D.title||'',dueDate:D.dueDate||today(),dueTime:D.dueTime||'',buyerId:D.buyerId||'',notes:D.notes||'',done:false};if(!t.title)throw new Error('title required');S.tasks.push(t);return 'task added: '+t.title}
+case 'update_task':{const t=get(S.tasks);Object.assign(t,pick(D,TKF));return 'task updated: '+t.title}
+case 'delete_task':{const t=get(S.tasks);S.tasks=S.tasks.filter(x=>x!==t);return 'task deleted: '+t.title}
+case 'add_eco':{if(!D.address)throw new Error('address required');const d=fixD(pick(D,EF));const ex=S.eco.find(x=>nAddr(x.address)===nAddr(d.address));
+if(ex){Object.assign(ex,d,{trashed:false});if(D.market)ex.market=D.market;return 'ECO deal already existed, updated: '+ex.address}
+const n={id:uid(),src:'chat',type:ECO_T[0],market:D.market||'',...d};if(!n.city){const p=parseAddr(n.address);if(p){n.city=p.ct;n.state=n.state||p.st}}S.eco.push(n);return 'ECO deal added: '+n.address}
+case 'update_eco':{const d=get(S.eco);Object.assign(d,fixD(pick(D,EF)));if(D.market)d.market=D.market;if(D.address||D.city)d.geo=null;return 'ECO deal updated: '+d.address}
+case 'move_eco':{const d=get(S.eco);d.market=D.market;return 'ECO deal moved to '+D.market}
+case 'trash_eco':{const d=get(S.eco);d.trashed=true;return 'ECO deal to trash: '+d.address}
+case 'restore_eco':{const d=get(S.eco);d.trashed=false;return 'ECO deal restored: '+d.address}
+case 'delete_eco':{const d=get(S.eco);S.eco=S.eco.filter(x=>x!==d);return 'ECO deal deleted forever: '+d.address}
+case 'sync_eco_market':{const r=applyShot(D.market||'Unknown market',D.deals||[],true);return 'market synced: +'+r.add+' new, '+r.upd+' updated, '+r.tr+' to trash, '+r.dup+' duplicates'}
+case 'add_deal':{const d={id:uid(),address:'',info:'',buyer:'',notes:'',photos:[],calls:[],...pick(D,DFF)};if(!d.address)throw new Error('address required');S.deals.push(d);return 'closed deal added: '+d.address}
+case 'update_deal':{const d=get(S.deals);Object.assign(d,pick(D,DFF));return 'closed deal updated: '+d.address}
+case 'delete_deal':{const d=get(S.deals);[...(d.photos||[]),...(d.calls||[])].forEach(x=>fdel(x.id));S.deals=S.deals.filter(x=>x!==d);return 'closed deal deleted: '+d.address}
+case 'add_template_section':S.tpl.push({id:uid(),name:D.name||'New',items:[]});return 'section added';
+case 'delete_template_section':{const s=get(S.tpl);S.tpl=S.tpl.filter(x=>x!==s);return 'section deleted: '+s.name}
+case 'add_template_text':{get(S.tpl).items.push({id:uid(),text:D.text||''});return 'template text added'}
+case 'update_template_text':{const it=get(S.tpl).items.find(i=>i.id===a.item_id);if(!it)throw new Error('item not found');it.text=D.text||'';return 'template text updated'}
+case 'delete_template_text':{const s=get(S.tpl);s.items=s.items.filter(i=>i.id!==a.item_id);return 'template text deleted'}
+default:throw new Error('unknown op')}}
+let AIH=[];
 async function askAI(){const i=$('aiQ'),q=i.value.trim();if(!q)return;const L=$('aiL');L.innerHTML+=`<div class="am u">${esc(q)}</div>`;i.value='';L.scrollTop=L.scrollHeight;
-const sys='You are a brief assistant inside a real estate buyers CRM. Today is '+today()+'. Buyers: '+JSON.stringify(S.buyers.map(b=>({name:b.name,phone:b.phone,city:b.city,state:b.state,status:b.status,rating:b.rating,stage:b.leadStage,notes:b.notes})))+'. Tasks: '+JSON.stringify(S.tasks.map(t=>({title:t.title,due:t.dueDate,done:t.done})));
-try{const a=await aiCall(sys,q);L.innerHTML+=`<div class="am a">${esc(a)}</div>`}catch(e){L.innerHTML+=`<div class="am a">error: ${esc(e.message)}. if this is a network error, this page may block outside connections. open the file from your computer or your own site</div>`}L.scrollTop=L.scrollHeight}
+const sys=`You are the assistant inside a real estate buyers CRM. You have FULL access: read, add, edit and delete everything. Today is ${today()}. Answer in the language the user writes (Arabic or English), briefly. Reply ONLY with JSON: {"reply":"text","actions":[{"op":"...","id":"...","item_id":"...","data":{}}]}. Use actions only when the user asks to change something; use [] for questions. Always use ids from the data below, never invent ids. If you must delete or change more than 3 items at once, ask for confirmation first and send no actions. ECO deals: prefer trash_eco over delete_eco unless asked to delete forever. Ops: add_buyer, update_buyer, delete_buyer, add_offer(data:location,amount), log_call, add_task, update_task, delete_task, add_eco, update_eco, move_eco(data.market), trash_eco, restore_eco, delete_eco, sync_eco_market(data:{market,deals:[{address,city,state,type,price,beds,baths,sqft,notes}]}) (makes the market list EXACTLY equal to deals), add_deal, update_deal, delete_deal, add_template_section, delete_template_section, add_template_text(id=section), update_template_text(id=section,item_id), delete_template_text(id=section,item_id). Buyer data keys: name,phone,address,city,state,status(hot|warm|cold),rating(1-10),showing,pShowing,offerMade,pOffer,isLead,leadStage(new|voicemail|follow_up|not_interested),notes,leadNote,niGroup. Task keys: title,dueDate(YYYY-MM-DD),dueTime,buyerId,notes,done. ECO keys: market,address,city,state,type(Single Family|HOA|Mobile Home|Land|Commercial),price,beds,baths,sqft,notes. Closed deal keys: address,info,buyer,notes. Current data: ${aiState()}`;
+try{const raw=await aiCall(sys,q,null,true,AIH);let r;try{r=JSON.parse(raw)}catch(e){r=jsonOf(raw)}
+const out=[];(Array.isArray(r.actions)?r.actions:[]).forEach(a=>{try{out.push('✓ '+runAct(a))}catch(e){out.push('✗ '+(a&&a.op)+': '+e.message)}});
+if(out.length){save();renderAll()}
+const txt=(r.reply||'')+(out.length?'\n\n'+out.join('\n'):'');
+AIH.push({role:'user',parts:[{text:q}]},{role:'model',parts:[{text:txt||'ok'}]});AIH=AIH.slice(-16);
+L.innerHTML+=`<div class="am a">${esc(txt||'ok')}</div>`}
+catch(e){L.innerHTML+=`<div class="am a">error: ${esc(e.message)}. if this is a network error, this page may block outside connections. open the file from your computer or your own site</div>`}L.scrollTop=L.scrollHeight}
+async function chatShot(inp){const L=$('aiL');L.innerHTML+=`<div class="am u">📎 ${inp.files.length} screenshot(s)</div>`;L.scrollTop=L.scrollHeight;const m=await ecoShot(inp);L.innerHTML+=`<div class="am a">${esc(m||'')}</div>`;L.scrollTop=L.scrollHeight}
+
 function secColor(id,v,el){sec(id).color=v;save();el.closest('.tpl').style.background=v}
 function lg(b,x){(b.log=b.log||[]).push({t:new Date().toISOString(),x:x})}
 /* lead profile */
@@ -261,7 +320,7 @@ function profile(id){const b=S.buyers.find(x=>x.id===id);if(!b)return;
 $('pmBody').innerHTML=`<h2>${esc(b.name)}</h2><div class="sub">${esc(b.phone||'no phone')} - ${esc([b.address,city(b),b.state].filter(Boolean).join(', ')||'no address')}</div><div style="margin:8px 0"><span class="badge ${b.status}">${b.status}</span> <span class="badge cold">★ ${b.rating}/10</span> <span class="badge warm">${esc(b.leadStage||'new')}</span> <span class="badge cold">group: ${esc(grp(b))}</span> <span class="badge cold">${b.calls||0} calls</span> ${flags(b)}</div>${b.notes?`<div class="f"><label>notes</label><div>${esc(b.notes)}</div></div>`:''}${b.leadNote?`<div class="f"><label>lead note</label><div>${esc(b.leadNote)}</div></div>`:''}${(b.offers||[]).length?`<div class="f"><label>offers</label>${b.offers.map(o=>`<div class="sub">${esc(o.amount)} - ${esc(o.location)} (${esc(o.date)})</div>`).join('')}</div>`:''}<div class="f"><label>history</label>${(b.log||[]).length?[...b.log].reverse().map(e=>`<div class="lg"><small>${new Date(e.t).toLocaleString()}</small>${esc(e.x)}</div>`).join(''):'<div class="sub">no history yet</div>'}</div><div class="acts"><button class="btn g" onclick="cl('pm')">close</button><button class="btn b" onclick="cl('pm');buyerModal('${b.id}')">edit</button></div>`;op('pm')}
 /* address autofill */
 const STATES='AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
-function parseAddr(a){const p=a.split(',').map(x=>x.trim()).filter(Boolean);if(p.length<2)return null;const last=p[p.length-1];let m=last.match(/^([A-Za-z]{2})(\s+\d{5}(-\d{4})?)?$/);
+function parseAddr(a){a=String(a||'');const p=a.split(',').map(x=>x.trim()).filter(Boolean);if(p.length<2)return null;const last=p[p.length-1];let m=last.match(/^([A-Za-z]{2})(\s+\d{5}(-\d{4})?)?$/);
 if(m&&STATES.includes(m[1].toUpperCase())&&p.length>=2)return{ct:p[p.length-2].replace(/\s*\d{5}.*$/,''),st:m[1].toUpperCase()};
 m=last.match(/^(.+?)\s+([A-Za-z]{2})(\s+\d{5}(-\d{4})?)?$/);if(m&&STATES.includes(m[2].toUpperCase()))return{ct:m[1],st:m[2].toUpperCase()};return null}
 async function autoAddr(){const a=$('bAddr').value.trim();if(!a)return;let r=parseAddr(a);
@@ -276,15 +335,15 @@ function hydrate(root){root.querySelectorAll('[data-f]').forEach(async el=>{cons
 /* closed deals */
 let ed=null;
 function rDeals(){const g=$('dGrid');if(!g)return;g.innerHTML=S.deals.length?S.deals.map(d=>`<div class="dc" onclick="dealModal('${d.id}')">${d.photos&&d.photos[0]?`<img data-f="${d.photos[0].id}">`:''}<div class="t">${esc(d.address||'no address')}</div><div class="sub">buyer: ${esc(d.buyer||'-')}</div><div class="sub">${(d.photos||[]).length} photos - ${(d.calls||[]).length} calls</div></div>`).join(''):'<div class="card"><div class="empty">no closed deals yet</div></div>';hydrate(g)}
-function dealModal(id){const d=S.deals.find(x=>x.id===id);ed=d?JSON.parse(JSON.stringify(d)):{id:uid(),address:'',info:'',buyer:'',notes:'',photos:[],calls:[]};
+function dealModal(id){const d=S.deals.find(x=>x.id===id);ed=d?JSON.parse(JSON.stringify(d)):{id:uid(),address:'',info:'',buyer:'',notes:'',photos:[],calls:[]};ed.photos=ed.photos||[];ed.calls=ed.calls||[];
 $('dAddr').value=ed.address;$('dInfo').value=ed.info||'';$('dBuyer').value=ed.buyer||'';$('dNotes').value=ed.notes||'';$('dBL').innerHTML=S.buyers.map(b=>`<option value="${esc(b.name)}">`).join('');$('dDel').style.display=d?'inline-block':'none';rDM();op('dm')}
 function rDM(){$('dPh').innerHTML=ed.photos.map((p,i)=>`<div class="ph"><img data-f="${p.id}"><button class="btn d s" onclick="ed.photos.splice(${i},1);rDM()">x</button></div>`).join('');
 $('dCl').innerHTML=ed.calls.map((c,i)=>`<div class="row" style="padding:6px 0;flex-wrap:wrap"><div class="sub" style="flex:1 1 100%">${esc(c.name)}</div><audio controls data-f="${c.id}" style="flex:1;min-width:0"></audio><button class="btn d s" onclick="ed.calls.splice(${i},1);rDM()">x</button></div>`).join('');hydrate($('dm'))}
 async function upFiles(inp,kind){for(const f of inp.files){const id=uid();if(await fput(id,f))ed[kind].push({id,name:f.name});else toast('file storage not available here')}inp.value='';rDM()}
 function saveDeal(){const a=$('dAddr').value.trim();if(!a)return toast('enter the address');ed.address=a;ed.info=$('dInfo').value;ed.buyer=$('dBuyer').value.trim();ed.notes=$('dNotes').value;
-const i=S.deals.findIndex(x=>x.id===ed.id);if(i>=0){const keep=new Set([...ed.photos,...ed.calls].map(x=>x.id));[...S.deals[i].photos,...S.deals[i].calls].filter(x=>!keep.has(x.id)).forEach(x=>fdel(x.id));S.deals[i]=ed}else S.deals.push(ed);
+const i=S.deals.findIndex(x=>x.id===ed.id);if(i>=0){const keep=new Set([...ed.photos,...ed.calls].map(x=>x.id));[...(S.deals[i].photos||[]),...(S.deals[i].calls||[])].filter(x=>!keep.has(x.id)).forEach(x=>fdel(x.id));S.deals[i]=ed}else S.deals.push(ed);
 save();cl('dm');renderAll();toast('deal saved')}
-function delDeal(){sure('delete this deal and its files?',()=>{const d=S.deals.find(x=>x.id===ed.id);if(d)[...d.photos,...d.calls].forEach(x=>fdel(x.id));S.deals=S.deals.filter(x=>x.id!==ed.id);save();cl('dm');renderAll()})}
+function delDeal(){sure('delete this deal and its files?',()=>{const d=S.deals.find(x=>x.id===ed.id);if(d)[...(d.photos||[]),...(d.calls||[])].forEach(x=>fdel(x.id));S.deals=S.deals.filter(x=>x.id!==ed.id);save();cl('dm');renderAll()})}
 /* showing / offer flags */
 const flags=b=>(b.showing?'<span class="badge warm">\u2713 showing</span> ':'')+(b.pShowing?'<span class="badge cold">\u23f3 pending showing</span> ':'')+(b.offerMade?'<span class="badge hot">\u2713 offer</span> ':'')+(b.pOffer?'<span class="badge cold">\u23f3 pending offer</span> ':'');
 function ex(el,o){if(el.checked)$(o).checked=false}
@@ -303,7 +362,8 @@ try{micR.start();micOn=true;$('micBtn').classList.add('rec')}catch(e){toast('cou
 function micStop(){micOn=false;$('micBtn').classList.remove('rec');try{micR&&micR.stop()}catch(e){}}
 function micToggle(){micOn?micStop():micStart()}
 $('micSel').value=MIC.lang;
-/* ECO deals */
+
+/* ================= ECO deals ================= */
 const ECO_T=['Single Family','HOA','Mobile Home','Land','Commercial'];
 let ECO={gkey:''};try{const e=localStorage.getItem('shimaa_eco');if(e)ECO=JSON.parse(e)}catch(e){}
 $('gKey').value=ECO.gkey||'';$('ecT').innerHTML='<option value="">all types</option>'+ECO_T.map(t=>`<option>${t}</option>`).join('');$('ecType').innerHTML=ECO_T.map(t=>`<option>${t}</option>`).join('');
@@ -350,30 +410,53 @@ async function ecoLocate(list,manual){if(!list.length){if(manual)toast('all deal
 for(const d of list){const g=await geocode([d.address,d.city,d.state].filter(Boolean).join(', '));if(g){d.geo=g;ok++}}
 for(const k of new Set(list.map(mkey))){if(!S.cc[k]){const g=await geocode(k);if(g)S.cc[k]=g}}
 save();renderAll();if(ok)toast('exact location found for '+ok+' deals');else if(manual)toast('map service is not reachable here. try "locate with Gemini" or open the file from your computer')}
-const jsonOf=t=>JSON.parse(t.match(/[\[{][\s\S]*[\]}]/)[0]);
 async function ecoEstimate(){if(!AI.key)return toast('add your Gemini api key in settings first');const list=S.eco.filter(d=>!d.geo&&!d.trashed);if(!list.length)return toast('all deals are already located');toast('asking Gemini...');
 try{const t=await aiCall('You estimate map coordinates. Reply ONLY with JSON.','Estimate approximate latitude and longitude for each US property address below and for each city center. Reply ONLY with JSON: {"deals":{"<id>":[lat,lng]},"cities":{"<city, ST>":[lat,lng]}}. Addresses: '+JSON.stringify(list.map(d=>({id:d.id,address:[d.address,d.city,d.state].filter(Boolean).join(', ')})))+' Cities: '+JSON.stringify([...new Set(list.map(mkey))]),null,true);
 const r=jsonOf(t);
 list.forEach(d=>{const x=r.deals&&r.deals[d.id];if(x)d.geo={lat:+x[0],lng:+x[1],approx:true}});for(const k in (r.cities||{}))S.cc[k]={lat:+r.cities[k][0],lng:+r.cities[k][1]};save();renderAll();toast('approximate locations added')}catch(e){toast('Gemini could not answer ('+e.message+')')}}
-/* screenshot import: every image is read on its own and its deals go under the major market written in that image */
-async function ecoShot(inp){const files=[...inp.files];inp.value='';if(!files.length)return;if(!AI.key)return toast('add your Gemini api key in settings first');
-const nk=a=>String(a||'').toLowerCase().replace(/[^a-z0-9]/g,''),seen=new Set(),markets=new Set();let add=0,upd=0,tr=0,fail=0;
-for(let n=0;n<files.length;n++){toast('reading screenshot '+(n+1)+' of '+files.length+'...');let r;
-try{const img=await b64(files[n]);
-const t=await aiCall('You extract data from images. Reply ONLY with JSON.','Read this screenshot of real estate wholesale deals and extract EVERY deal. First find the MAJOR MARKET written in the screenshot itself (a market / metro / area name shown in a title, header or filter, for example "Dallas-Fort Worth, TX"). Do NOT take the market from the property addresses. Reply ONLY with JSON, no other text: {"market":"major market exactly as shown in the screenshot","deals":[{"address":"street address","city":"","state":"2-letter","type":"Single Family|HOA|Mobile Home|Land|Commercial","price":"as shown","beds":"","baths":"","sqft":"","notes":"other useful details","lat":0,"lng":0}],"cities":{"City, ST":[lat,lng]}}. Use an empty string when unknown. lat and lng are your best approximate coordinates of the property (or its street), and cities holds each city center.',[img],true);
-r=jsonOf(t)}catch(e){fail++;continue}
-const market=String(r.market||'').trim()||'Unknown market',list=(Array.isArray(r)?r:(r.deals||[])).filter(x=>x&&x.address);
-if(!list.length){fail++;continue}markets.add(market);
-list.forEach(x=>{const k=nk(x.address);let city=x.city||'',st=(x.state||'').toUpperCase();if(!city){const pa=parseAddr(x.address);if(pa){city=pa.ct;st=st||pa.st}}
+
+/* ---- screenshot import with exact sync ----
+   every image is read row by row, Gemini counts the visible deals first (total_visible),
+   a wrong count triggers a second read. deals of the same market from all images are merged,
+   then the market is synced: new ones added, existing ones updated, duplicates merged,
+   and deals missing from the newest screenshot go to the trash */
+const nAddr=a=>String(a||'').toLowerCase().split(',')[0].replace(/\./g,'').replace(/\bstreet\b/g,'st').replace(/\bavenue\b/g,'ave').replace(/\bdrive\b/g,'dr').replace(/\broad\b/g,'rd').replace(/\blane\b/g,'ln').replace(/\bboulevard\b/g,'blvd').replace(/\bcourt\b/g,'ct').replace(/\bcircle\b/g,'cir').replace(/\bplace\b/g,'pl').replace(/\bhighway\b/g,'hwy').replace(/\b(north|south|east|west)\b/g,m=>m[0]).replace(/[^a-z0-9]/g,'');
+const mnorm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+async function readShot(f){const img=await b64(f);let last;
+for(let a=0;a<2;a++){
+const t=await aiCall('You extract data from images with perfect accuracy. Reply ONLY with JSON.','Read this screenshot of real estate wholesale deals. Go through it row by row (or card by card), from top to bottom, and extract EVERY deal. One deal per row/card. Never skip, never merge, never invent. Copy addresses exactly as written. First count the deals visible and put that number in total_visible. Find the MAJOR MARKET written in the screenshot itself (title, header or filter, e.g. "Dallas-Fort Worth, TX"), NOT from the property addresses. Reply ONLY with JSON: {"market":"","total_visible":0,"deals":[{"address":"street address","city":"","state":"2-letter","type":"Single Family|HOA|Mobile Home|Land|Commercial","price":"as shown","beds":"","baths":"","sqft":"","notes":"other details","lat":0,"lng":0}],"cities":{"City, ST":[lat,lng]}}. Use empty string when unknown. lat/lng are your best approximate coordinates.'+(a?' WARNING: your previous answer had a different number of deals than total_visible. Count again slowly and list every single row.':''),[img],true);
+let r;try{r=JSON.parse(t)}catch(e){r=jsonOf(t)}
+if(Array.isArray(r))r={deals:r};const n=(r.deals||[]).filter(x=>x&&x.address).length;r.ok=!(+r.total_visible>0)||+r.total_visible===n;last=r;if(r.ok)break}
+return last}
+function applyShot(rawMarket,list,sync){const ex0=S.eco.find(d=>!d.trashed&&mnorm(mkey(d))===mnorm(rawMarket))||S.eco.find(d=>mnorm(mkey(d))===mnorm(rawMarket));
+const market=ex0?mkey(ex0):(String(rawMarket).trim()||'Unknown market');const seen=new Set();let add=0,upd=0,dup=0,tr=0;
+list.forEach(x=>{if(!x||!x.address)return;const k=nAddr(x.address);if(!k)return;let city=x.city||'',st=(x.state||'').toUpperCase();
+if(!city){const pa=parseAddr(x.address);if(pa){city=pa.ct;st=st||pa.st}}
 const geo=x.lat!=null&&x.lng!=null&&isFinite(+x.lat)&&isFinite(+x.lng)&&(+x.lat||+x.lng)?{lat:+x.lat,lng:+x.lng,approx:true}:null;
-const type=ECO_T.find(t=>t.toLowerCase()===String(x.type||'').toLowerCase())||ECO_T[0],ex=S.eco.find(d=>nk(d.address)===k);
-if(ex){ex.trashed=false;if(!ex.market)ex.market=market;if(x.price)ex.price=x.price;if(x.beds)ex.beds=x.beds;if(x.baths)ex.baths=x.baths;if(x.sqft)ex.sqft=x.sqft;if(!ex.geo&&geo)ex.geo=geo;seen.add(ex.id);upd++;ecoOpen.add(mkey(ex))}
-else{const d={id:uid(),src:'shot',market,address:x.address,city,state:st,type,price:x.price||'',beds:x.beds||'',baths:x.baths||'',sqft:x.sqft||'',notes:x.notes||'',geo};S.eco.push(d);seen.add(d.id);ecoOpen.add(market);add++}});
-for(const k in (r.cities||{}))if(!S.cc[k]&&r.cities[k]&&r.cities[k].length>1)S.cc[k]={lat:+r.cities[k][0],lng:+r.cities[k][1]}}
-if($('ecSync').checked)S.eco.forEach(d=>{if(d.src==='shot'&&!d.trashed&&markets.has(mkey(d))&&!seen.has(d.id)){d.trashed=true;tr++}});
-save();renderAll();if(!markets.size)return toast('could not read the screenshot');
-toast('added '+add+', updated '+upd+(tr?', moved '+tr+' to trash':'')+(fail?', '+fail+' image failed':''));ecoLocate(S.eco.filter(d=>(!d.geo||d.geo.approx)&&!d.trashed))}
-/* cartoon helper */
+const type=ECO_T.find(t=>t.toLowerCase()===String(x.type||'').toLowerCase());
+const same=S.eco.filter(d=>nAddr(d.address)===k);const cur=same.find(d=>mkey(d)===market)||same[0];
+if(cur){if(seen.has(cur.id)){dup++;return}
+cur.trashed=false;cur.market=market;if(city&&!cur.city)cur.city=city;if(st&&!cur.state)cur.state=st;if(type)cur.type=type;
+['price','beds','baths','sqft'].forEach(f=>{if(x[f])cur[f]=x[f]});if(x.notes)cur.notes=x.notes;if(!cur.geo&&geo)cur.geo=geo;
+seen.add(cur.id);upd++;same.forEach(o=>{if(o!==cur&&!o.trashed){o.trashed=true;dup++}})}
+else{const d={id:uid(),src:'shot',market,address:x.address,city,state:st,type:type||ECO_T[0],price:x.price||'',beds:x.beds||'',baths:x.baths||'',sqft:x.sqft||'',notes:x.notes||'',geo};S.eco.push(d);seen.add(d.id);add++}});
+if(sync)S.eco.forEach(d=>{if(!d.trashed&&mnorm(mkey(d))===mnorm(market)&&!seen.has(d.id)){d.trashed=true;tr++}});
+ecoOpen.add(market);return{add,upd,dup,tr}}
+async function ecoShot(inp){const files=[...inp.files];inp.value='';if(!files.length)return;
+if(!AI.key){toast('add your Gemini api key in settings first');return 'add your Gemini api key in settings first'}
+const G={};let fail=0;
+for(let n=0;n<files.length;n++){toast('reading screenshot '+(n+1)+' of '+files.length+'...');
+try{const r=await readShot(files[n]);const list=(r.deals||[]).filter(x=>x&&x.address);if(!list.length){fail++;continue}
+const raw=String(r.market||'').trim()||'Unknown market',key=mnorm(raw);const g=G[key]=G[key]||{market:raw,list:[],ok:true};g.list.push(...list);if(r.ok===false)g.ok=false;
+for(const k in (r.cities||{}))if(!S.cc[k]&&r.cities[k]&&r.cities[k].length>1)S.cc[k]={lat:+r.cities[k][0],lng:+r.cities[k][1]}}catch(e){fail++}}
+const T={add:0,upd:0,dup:0,tr:0},skipped=[],want=$('ecSync').checked;
+for(const k in G){const g=G[k];if(want&&!g.ok)skipped.push(g.market);const x=applyShot(g.market,g.list,want&&g.ok);for(const t in T)T[t]+=x[t]}
+save();renderAll();
+if(!Object.keys(G).length){const m='could not read the screenshot';toast(m);return m}
+const msg='added '+T.add+', updated '+T.upd+(T.dup?', duplicates removed '+T.dup:'')+(T.tr?', moved '+T.tr+' to trash':'')+(fail?', '+fail+' image failed':'')+(skipped.length?'. removal skipped for '+skipped.join(', ')+' because the count did not match, resend a clearer screenshot':'');
+toast(msg);ecoLocate(S.eco.filter(d=>(!d.geo||d.geo.approx)&&!d.trashed));return msg}
+
+/* ================= cartoon helper ================= */
 const wrap=(back,skin,shirt,front)=>`<svg viewBox="0 0 100 100">${back}<rect x="30" y="80" width="44" height="12" rx="6" fill="#5b6b9a"/><rect x="34" y="58" width="32" height="26" rx="10" fill="${shirt}"/><rect x="27" y="60" width="9" height="22" rx="4.5" fill="${skin}"/><ellipse cx="50" cy="38" rx="17" ry="18" fill="${skin}"/>${front}<ellipse class="eye" cx="43" cy="39" rx="2.2" ry="2.6" fill="#2b2b2b"/><ellipse class="eye" cx="57" cy="39" rx="2.2" ry="2.6" fill="#2b2b2b"/><circle cx="39" cy="45" r="3" fill="#f4a3a3" opacity=".6"/><circle cx="61" cy="45" r="3" fill="#f4a3a3" opacity=".6"/><path d="M44 47Q50 52 56 47" stroke="#8a3b3b" stroke-width="1.8" fill="none" stroke-linecap="round"/><g class="arm"><rect x="65.5" y="28" width="9" height="36" rx="4.5" fill="${skin}"/><circle cx="70" cy="27" r="5.5" fill="${skin}"/></g></svg>`;
 function girl(o){const H=o.hair,hs=o.hs;let b='',f='';
 if(hs==='long'||hs==='star')b=`<path d="M25 40Q25 10 50 10Q75 10 75 40L78 80Q50 72 22 80Z" fill="${H}"/>`;
