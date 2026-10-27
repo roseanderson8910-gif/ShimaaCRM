@@ -233,7 +233,7 @@ function applyF(){loadFont(F.fh);loadFont(F.fb);document.body.style.setProperty(
 function setF(){F.fh=$('fH').value;F.fb=$('fB').value;F.zoom=+$('fZ').value;$('fZv').textContent=F.zoom;applyF();try{localStorage.setItem('shimaa_font',JSON.stringify(F))}catch(e){}}
 const fopts=FONTS.map(f=>`<option>${f}</option>`).join('');$('fH').innerHTML=fopts;$('fB').innerHTML=fopts;$('fH').value=F.fh;$('fB').value=F.fb;$('fZ').value=F.zoom;$('fZv').textContent=F.zoom;
 /* AI */
-const DM = { gemini: 'gemini-2.5-flash' };
+const DM = { gemini: 'gemini-3.8-flash' };
 let AI = { prov: 'gemini', model: DM.gemini, key: '' };
 try { const a = localStorage.getItem('shimaa_ai'); if (a) AI = { ...AI, ...JSON.parse(a) } } catch (e) { }
 if ($('aiModel')) $('aiModel').value = AI.model;
