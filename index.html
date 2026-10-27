@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shimaa CRM</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
@@ -65,7 +66,7 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--soft);margin-bo
 </style></head><body>
 <div class="app">
 <div class="side"><div class="brand">Shimaa <span>CRM</span></div>
-<div class="nav on" data-p="dashboard">dashboard</div><div class="nav" data-p="buyers">buyers</div><div class="nav" data-p="leads">leads</div><div class="nav" data-p="eco">ECO deals</div><div class="nav" data-p="deals">closed deals</div><div class="nav" data-p="offers">offers</div><div class="nav" data-p="tasks">tasks</div><div class="nav" data-p="city">by city</div><div class="nav" data-p="templates">templates</div><div class="nav" data-p="settings">settings</div></div>
+<div class="nav on" data-p="dashboard">dashboard</div><div class="nav" data-p="buyers">buyers</div><div class="nav" data-p="leads">leads</div><div class="nav" data-p="eco">ECO deals</div><div class="nav" data-p="deals">closed deals</div><div class="nav" data-p="offers">offers</div><div class="nav" data-p="tasks">tasks</div><div class="nav" data-p="city">by city</div><div class="nav" data-p="templates">templates</div><div class="nav" data-p="settings">settings</div><div id="cloudSt" style="margin-top:auto;padding:12px 22px;font-size:12px;opacity:.7"></div></div>
 <div class="main">
 <div class="page on" id="p-dashboard"><div class="head"><div><h1>dashboard</h1><p id="today"></p></div><button class="btn b" onclick="taskModal()">+ new task</button></div>
 <div class="grid3"><div class="card stat"><b id="sB">0</b><span>buyers tracked</span></div><div class="card stat"><b id="sH">0</b><span>hot leads</span></div><div class="card stat"><b id="sT">0</b><span>tasks due today</span></div></div>
@@ -88,6 +89,8 @@ label{display:block;font-size:12.5px;font-weight:600;color:var(--soft);margin-bo
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>Google Maps (ECO deals)</b><p class="sub">optional key for exact distances. without it the site tries OpenStreetMap, and "locate with Gemini" gives approximate places</p><input id="gKey" type="password" placeholder="Google Maps API key"><button class="btn b s" style="margin-top:8px" onclick="ECO.gkey=$('gKey').value.trim();try{localStorage.setItem('shimaa_eco',JSON.stringify(ECO))}catch(e){}toast('saved')">save</button></div>
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>font</b><div class="fr" style="margin-top:10px"><div class="f"><label>headings font</label><select id="fH" onchange="setF()"></select></div><div class="f"><label>body font</label><select id="fB" onchange="setF()"></select></div></div><div class="f"><label>text size: <span id="fZv"></span>%</label><input type="range" id="fZ" min="80" max="130" step="5" oninput="setF()"></div></div>
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>Gemini AI</b><p class="sub">paste a free key from aistudio.google.com/apikey. it is used for the chat button, reading ECO screenshots and locating deals. the key stays in this browser</p><div class="f"><label>model</label><input id="aiModel"></div><div class="f"><label>api key</label><input type="password" id="aiKey" placeholder="paste your Gemini api key"></div><button class="btn b s" onclick="aiSave()">save</button> <button class="btn g s" onclick="aiTest()">test connection</button></div>
+<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>Cloud sync (Firebase)</b><p class="sub" id="cloudSt2">cloud: not signed in</p><div class="fr"><div class="f"><label>email</label><input id="cEmail" type="email" autocomplete="username"></div><div class="f"><label>password (6+ characters)</label><input id="cPass" type="password" autocomplete="current-password"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn b s" onclick="cloudSign('in')">sign in</button><button class="btn g s" onclick="cloudSign('new')">create account</button><button class="btn g s" onclick="cloudNow()">sync now</button><button class="btn d s" onclick="cloudOut()">sign out</button></div></div>
+<div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>backup file</b><p class="sub">download a copy of all your data as a file, or restore from one. photos and call recordings of closed deals are not inside it</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn b s" onclick="exportJSON()">download backup</button><label class="btn g s" style="display:inline-block;margin:0;cursor:pointer;color:var(--ink)">restore from backup<input type="file" accept=".json,application/json" style="display:none" onchange="importJSON(this)"></label></div></div>
 <div class="card" style="padding:16px;margin-top:16px;max-width:520px"><b>data</b><p class="sub">everything is saved in this browser</p><button class="btn d s" onclick="sure('erase all data?',()=>{S=blank();save();renderAll()})">erase all data</button></div></div>
 </div></div>
 
@@ -129,7 +132,7 @@ const LABELS={paper:'main screen background',card:'cards and boxes',ink:'text',s
 const blank=()=>({buyers:[],tasks:[],deals:[],eco:[],tpl:[{id:uid(),name:'Intro',items:[]},{id:uid(),name:'Follow up',items:[]},{id:uid(),name:'No answer',items:[]},{id:uid(),name:'Extras',items:[]}]});
 let S=blank(),C={...(matchMedia('(prefers-color-scheme: dark)').matches?DARK:LIGHT)};
 try{const d=localStorage.getItem('shimaa_data');if(d)S=JSON.parse(d);const c=localStorage.getItem('shimaa_colors');if(c)C={...C,...JSON.parse(c)}}catch(e){}
-S.deals=S.deals||[];S.eco=S.eco||[];S.cc=S.cc||{};const save=()=>{try{localStorage.setItem('shimaa_data',JSON.stringify(S))}catch(e){}};
+S.deals=S.deals||[];S.eco=S.eco||[];S.cc=S.cc||{};const save=()=>{try{localStorage.setItem('shimaa_data',JSON.stringify(S))}catch(e){}if(typeof cloudDirty==='function')cloudDirty()};
 const saveC=()=>{try{localStorage.setItem('shimaa_colors',JSON.stringify(C))}catch(e){}};
 function applyC(){for(const k in C)document.body.style.setProperty('--'+k,C[k])}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1900)}
@@ -469,5 +472,49 @@ function mReset(){M.x=M.y=null;mSave();mRender()}
 el.addEventListener('pointerdown',e=>{st={x:e.clientX,y:e.clientY,l:el.offsetLeft,t:el.offsetTop,d:false};el.setPointerCapture(e.pointerId);e.preventDefault()});
 el.addEventListener('pointermove',e=>{if(!st)return;const dx=e.clientX-st.x,dy=e.clientY-st.y;if(!st.d&&Math.hypot(dx,dy)>4)st.d=true;if(st.d){M.x=Math.max(0,Math.min(innerWidth-M.size,st.l+dx));M.y=Math.max(0,Math.min(innerHeight-M.size,st.t+dy));el.style.left=M.x+'px';el.style.top=M.y+'px'}});
 el.addEventListener('pointerup',()=>{if(!st)return;if(st.d)mSave();else{mSound();el.classList.remove('jump');void el.offsetWidth;el.classList.add('jump');setTimeout(()=>el.classList.remove('jump'),520)}st=null})})();
-applyF();applyC();renderAll();mCards();
+/* cloud sync (Firebase Auth + Firestore). each buyer / task / deal is its own document under users/<uid>. api keys of Gemini and Maps stay local */
+const FBC={apiKey:"AIzaSyD1JZTnxze7-e4sMwidI2emy2wQOYMmSCM",authDomain:"shimaa99-38a27.firebaseapp.com",projectId:"shimaa99-38a27",storageBucket:"shimaa99-38a27.firebasestorage.app",messagingSenderId:"918405491399",appId:"1:918405491399:web:fed7fc6d7652b3c4da2ce2"};
+const COLS=['buyers','tasks','deals','eco'];
+let fbDb=null,fbAuth=null,cUser=null,cSnap={},cReady=false,cTimer=null,cBusy=false,cLast=0;
+function cSt(m){['cloudSt','cloudSt2'].forEach(i=>{const e=$(i);if(e)e.textContent=m})}
+const uref=()=>fbDb.collection('users').doc(cUser.uid);
+const sameMap=(a,b)=>{const ka=Object.keys(a);return ka.length===Object.keys(b).length&&ka.every(k=>a[k]===b[k])};
+function cMap(){const m={};COLS.forEach(c=>(S[c]||[]).forEach(x=>{m[c+'/'+x.id]=JSON.stringify(x)}));m['meta/tpl']=JSON.stringify(S.tpl||[]);m['meta/cc']=JSON.stringify(S.cc||{});return m}
+async function cPull(){const m={};await Promise.all(COLS.concat(['meta']).map(c=>uref().collection(c).get().then(q=>q.forEach(d=>{const j=d.data().j;if(typeof j==='string')m[c+'/'+d.id]=j}))));return m}
+function applyRemote(rm,merge){COLS.forEach(c=>{const rem=Object.keys(rm).filter(k=>k.startsWith(c+'/')).map(k=>JSON.parse(rm[k]));
+const ids=new Set(rem.map(x=>x.id));S[c]=merge?rem.concat((S[c]||[]).filter(x=>!ids.has(x.id))):rem});
+if(rm['meta/tpl'])S.tpl=JSON.parse(rm['meta/tpl']);
+if(rm['meta/cc'])S.cc=merge?{...(S.cc||{}),...JSON.parse(rm['meta/cc'])}:JSON.parse(rm['meta/cc']);
+try{localStorage.setItem('shimaa_data',JSON.stringify(S))}catch(e){}renderAll()}
+async function cPush(){if(!cUser||!cReady||cBusy)return;cBusy=true;clearTimeout(cTimer);cTimer=null;
+try{const cur=cMap(),ops=[];
+for(const k in cur)if(cur[k]!==cSnap[k])ops.push(['set',k,cur[k]]);
+for(const k in cSnap)if(!(k in cur))ops.push(['del',k]);
+for(let i=0;i<ops.length;i+=400){const b=fbDb.batch();ops.slice(i,i+400).forEach(o=>{const [c,id]=o[1].split('/'),r=uref().collection(c).doc(id);if(o[0]==='set')b.set(r,{j:o[2],t:Date.now()});else b.delete(r)});await b.commit()}
+cSnap=cur;cSt('cloud: saved '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}))}
+catch(e){cSt('cloud: save failed, retrying ('+(e.code||e.message)+')');cTimer=setTimeout(cPush,15000)}
+cBusy=false}
+function cloudDirty(){if(!cReady)return;clearTimeout(cTimer);cTimer=setTimeout(cPush,1500);cSt('cloud: unsaved changes...')}
+async function cloudLogin(){cReady=false;cSt('cloud: loading...');
+try{const rm=await cPull(),first=localStorage.getItem('shimaa_cloud_uid')!==cUser.uid,hasRemote=Object.keys(rm).length>0,hasLocal=COLS.some(c=>(S[c]||[]).length>0);
+if(!hasRemote){cSnap={};cReady=true;await cPush()}
+else if(first&&hasLocal){applyRemote(rm,true);cSnap=rm;cReady=true;await cPush()}
+else{applyRemote(rm,false);cSnap=cMap();cReady=true;cSt('cloud: connected')}
+try{localStorage.setItem('shimaa_cloud_uid',cUser.uid)}catch(e){}
+if(!hasRemote)toast('your data was uploaded to the cloud');else toast('cloud connected')}
+catch(e){cSt('cloud error: '+(e.code||e.message)+' (enable Firestore and the rules)')}}
+async function cRefresh(){if(!cReady||cBusy||Date.now()-cLast<60000)return;cLast=Date.now();cBusy=true;
+try{const rm=await cPull();if(sameMap(cMap(),cSnap)&&!sameMap(rm,cSnap)){applyRemote(rm,false);cSnap=cMap();cSt('cloud: updated from another device')}}catch(e){}cBusy=false}
+function cloudInit(){try{if(!window.firebase){cSt('cloud: sdk not loaded (offline?)');return}firebase.initializeApp(FBC);fbAuth=firebase.auth();fbDb=firebase.firestore();
+fbAuth.onAuthStateChanged(u=>{cUser=u;if(u)cloudLogin();else{cReady=false;cSt('cloud: signed out')}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)cRefresh()})}catch(e){cSt('cloud error: '+e.message)}}
+async function cloudSign(mode){if(!fbAuth)return toast('cloud is not loaded');const e=$('cEmail').value.trim(),p=$('cPass').value;if(!e||!p)return toast('enter email and password');
+try{if(mode==='new')await fbAuth.createUserWithEmailAndPassword(e,p);else await fbAuth.signInWithEmailAndPassword(e,p);$('cPass').value=''}catch(x){toast(x.code||x.message)}}
+function cloudOut(){if(fbAuth)fbAuth.signOut()}
+function cloudNow(){if(!cReady)return toast('sign in first');cPush();cRefresh()}
+function exportJSON(){const b=new Blob([JSON.stringify(S,null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='shimaa-crm-backup-'+today()+'.json';document.body.appendChild(a);a.click();a.remove();toast('backup downloaded')}
+function importJSON(inp){const f=inp.files[0];inp.value='';if(!f)return;f.text().then(t=>{let o;try{o=JSON.parse(t)}catch(e){return toast('not a valid backup file')}
+if(!o||!Array.isArray(o.buyers))return toast('this is not a CRM backup');
+sure('replace all current data with this backup?',()=>{S={...blank(),...o};S.deals=S.deals||[];S.eco=S.eco||[];S.cc=S.cc||{};save();renderAll();toast('backup restored')})})}
+applyF();applyC();renderAll();mCards();cloudInit();
 </script></body></html>
